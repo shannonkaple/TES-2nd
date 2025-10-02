@@ -1,58 +1,95 @@
-<html lang="en" style="--imgw: 1000px;"><plasmo-csui id="brisk-teaching-extension-shadow-root" data-extension-version="1.0.296" data-extension-name="Brisk Teaching – AI Assistant for Teachers" style="z-index: 2147483647;"></plasmo-csui><plasmo-csui id="plasmo-inspector"></plasmo-csui><script async="" defer="" src="chrome-extension://pcblbflgdkdfdjpjifeppkljdnaekohj/GdocApi.0c843771.js" type="text/javascript"></script><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Second Grade STEM: Identifying Browser Icons</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
-    --ok:#22c55e; --bad:#ef4444; --brand:#7c3aed;
-    --imgw: 1300px; /* default image width; use Zoom +/- to change */
+    /* Pastel, template-inspired palette */
+    --bg:#fff7fb;            /* very light pink background */
+    --card:#ffffff;
+    --ink:#2d2441;           /* deep plum text */
+    --muted:#7b6f8a;         /* muted text */
+    --line:#efe7f6;
+
+    --brand:#ff82c1;         /* bubblegum pink */
+    --brand-mint:#7bd8d4;    /* mint */
+    --brand-sky:#b3e5fc;     /* sky */
+    --accent:#ffd166;        /* sunshine yellow */
+
+    --ok:#22c55e; --bad:#ef4444;
+
+    --imgw: 1300px;          /* default image width; use Zoom +/- to change */
   }
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+
+  html,body{margin:0;background:linear-gradient(180deg,#fff7fb, #f7fffd 55%);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
   .wrap{max-width:1600px;margin:24px auto;padding:16px}
-  .title{font-family:Fredoka, cursive; text-align:center; margin:0 0 8px;
-    font-size:clamp(22px, 3.6vw, 44px); line-height:1.1}
+  .title{
+    font-family:Fredoka, cursive; text-align:center; margin:0 0 6px;
+    font-size:clamp(22px,3.6vw,44px); line-height:1.1;
+  }
+  .title .accent{color:var(--brand)}
   .subtitle{ text-align:center; margin:0 0 16px; color:var(--muted) }
 
   .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
   .hud{display:flex;gap:12px;align-items:center;color:var(--muted);font-weight:600}
   .hud strong{color:var(--ink)}
-  button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px}
+  button{
+    cursor:pointer;border:1px solid var(--line);background:linear-gradient(180deg,#fff,#fff);
+    color:var(--ink); border-radius:12px; padding:10px 14px; box-shadow:0 2px 0 rgba(0,0,0,.04);
+  }
+  button:hover{background:linear-gradient(180deg,#fff,#fef3fb)}
   label{display:inline-flex;gap:8px;align-items:center}
   input[type="checkbox"]{scale:1.1}
+
   .grid{display:grid;grid-template-columns: 360px 1fr; gap:16px; align-items:start}
   @media (max-width:1350px){ .grid{grid-template-columns:1fr} }
-  .card{background:var(--card);border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.08);padding:16px}
+
+  .card{
+    background:var(--card);border-radius:20px;border:1px solid var(--line);
+    box-shadow:0 10px 30px rgba(255,130,193,.08), 0 4px 10px rgba(0,0,0,.03);padding:16px
+  }
 
   /* Deck */
   .deckWrap{display:flex;flex-direction:column;align-items:center;gap:12px}
-  .deck{width:320px;height:180px;position:relative;perspective:1200px}
-  .cardFace{position:absolute; inset:0; display:grid; place-items:center; border-radius:16px;
-    border:1px solid var(--line); backface-visibility:hidden; transition:transform .6s ease; font-family:Fredoka, cursive;}
-  .backFace{ background:linear-gradient(135deg,#f1f5f9,#e9d5ff); color:#4c1d95; font-size:24px; }
-  .frontFace{ background:#ffffff; color:#111; font-size:28px; transform:rotateY(180deg); }
-  .deck.flipped .backFace{ transform:rotateY(180deg); }
-  .deck.flipped .frontFace{ transform:rotateY(0deg); }
+  .deck{width:340px;height:190px;position:relative;perspective:1200px}
+  .cardFace{
+    position:absolute; inset:0; display:grid; place-items:center; border-radius:16px;
+    border:1px solid var(--line); backface-visibility:hidden; transition:transform .6s ease; font-family:Fredoka, cursive;
+  }
+  .backFace{
+    background:linear-gradient(135deg, var(--brand) 0%, var(--brand-mint) 100%);
+    color:#fff; font-size:24px; text-shadow:0 1px 0 rgba(0,0,0,.1);
+  }
+  .frontFace{
+    background:#ffffff; color:var(--ink); font-size:30px; transform:rotateY(180deg);
+    border:2px dashed var(--brand-mint);
+    text-transform:lowercase;           /* lower-case display */
+  }
+  .deck.flipped .backFace{ transform:rotateY(180deg) }
+  .deck.flipped .frontFace{ transform:rotateY(0deg) }
   .dealTip{font-size:13px;color:var(--muted);text-align:center}
 
   /* Game image */
   .stage{position:relative}
   .confetti{position:absolute; inset:0; pointer-events:none}
   .game{position:relative;display:inline-block;line-height:0;user-select:none}
-  .game img{width:var(--imgw); max-width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:12px}
+  .game img{width:var(--imgw); max-width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:14px}
 
   /* Hotspots */
-  .hotspot{position:absolute; border:2px solid transparent; border-radius:8px; cursor:pointer; box-sizing:border-box}
-  .teach .hotspot{border-color:rgba(37,99,235,.55)}
+  .hotspot{position:absolute; border:2px solid transparent; border-radius:10px; cursor:pointer; box-sizing:border-box}
+  /* Only show outlines/handles in Teacher View */
+  .teach .hotspot{border-color:rgba(123,216,212,.8)}
   .hotspot.correct{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 4px rgba(34,197,94,.18)}
   .hotspot.wrong{outline:3px solid var(--bad); outline-offset:1.5px}
   .hotspot.solved{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 6px rgba(34,197,94,.15); background:rgba(34,197,94,.08)}
   .hotspot.solved::after{content:attr(data-name); position:absolute; left:0; top:-22px; padding:2px 6px; font-size:12px; font-weight:700; background:#16a34a; color:#fff; border-radius:6px; white-space:nowrap}
-  .hotspot.selected{outline:3px dashed #2563eb; outline-offset:2px}
+  .teach .hotspot.selected{outline:3px dashed var(--brand); outline-offset:2px}
 
   /* Resize handles (Teacher View) */
-  .handle{position:absolute;width:12px;height:12px;background:#2563eb;border:2px solid #fff;border-radius:3px;display:none}
+  .handle{position:absolute;width:12px;height:12px;background:var(--brand);border:2px solid #fff;border-radius:3px;display:none}
   .teach .hotspot.selected .handle{display:block}
   .h-nw{left:-8px;top:-8px}.h-n{left:calc(50% - 6px);top:-8px}.h-ne{right:-8px;top:-8px}
   .h-e{right:-8px;top:calc(50% - 6px)}.h-se{right:-8px;bottom:-8px}.h-s{left:calc(50% - 6px);bottom:-8px}
@@ -64,7 +101,7 @@
   .editor{grid-template-columns: repeat(5, minmax(120px,1fr)); gap:10px; align-items:end}
   .editor .field{display:flex;flex-direction:column;gap:6px}
   .editor label{font-size:12px;color:#374151}
-  .editor input[type=number]{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:8px}
+  .editor input[type=number]{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff}
   .editor .btnrow{display:flex;gap:8px;grid-column:1/-1;justify-content:flex-start}
   .cursorHud{grid-column:1/-1; font-size:12px; color:#6b7280}
 
@@ -73,21 +110,16 @@
   .tip{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
   .zoom{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
 </style>
-<style>
-.--brisk-axd {
-  filter: blur(4px);
-  user-select: none;
-}
-</style><style></style></head>
-<body data-new-gr-c-s-check-loaded="14.1255.0" data-gr-ext-installed="">
+</head>
+<body>
   <div class="wrap">
-    <h1 class="title">Second Grade STEM: <span style="color:var(--brand)">Identifying Browser Icons</span></h1>
+    <h1 class="title">Second Grade STEM: <span class="accent">Identifying Browser Icons</span></h1>
     <p class="subtitle">Flip a card to see the icon name. Click the matching spot on the browser!</p>
 
     <div class="row">
       <div class="hud">
-        <span>Score: <strong id="score">13</strong>/<strong id="total">13</strong></span>
-        <span>• Time: <strong id="clock">03:08</strong></span>
+        <span>Score: <strong id="score">0</strong>/<strong id="total">13</strong></span>
+        <span>• Time: <strong id="clock">00:00</strong></span>
       </div>
       <button id="restart">Restart</button>
       <label><input type="checkbox" id="teacher"> <span>Teacher View</span></label>
@@ -95,95 +127,95 @@
 
     <div class="grid">
       <!-- LEFT: Deck -->
-      <div class="card deckWrap">
-        <div id="deck" class="deck flipped" role="button" aria-label="Card deck (click to flip)">
-          <div class="cardFace backFace">Click to flip a card ✨</div>
-          <div class="cardFace frontFace" id="cardWord">Complete!</div>
+      <div class="card deckWrap" style="border-top:6px solid var(--brand);">
+        <div id="deck" class="deck" role="button" aria-label="Card deck (click to flip)">
+          <div class="cardFace backFace">click to flip a card ✨</div>
+          <div class="cardFace frontFace" id="cardWord">refresh</div>
         </div>
         <div class="dealTip">Tip: Click the card to reveal the next icon name.</div>
-        <div class="feedback ok" id="feedback">Copied current style to clipboard! Paste back into the HTML to save.</div>
+        <div class="feedback" id="feedback"></div>
       </div>
 
       <!-- RIGHT: Game + Editor -->
-      <div id="rightCard" class="card stage teach">
-        <canvas id="confetti" class="confetti" width="1224" height="768"></canvas>
+      <!-- Teacher View is OFF by default -->
+      <div id="rightCard" class="card stage" style="border-top:6px solid var(--brand-mint);">
+        <canvas id="confetti" class="confetti"></canvas>
 
         <div id="game" class="game">
           <img id="bg" src="chrome.png" alt="Chrome screenshot">
 
-          <!-- Hotspots (rough starting %; you can align exactly in Teacher View) -->
-          <div class="hotspot solved correct" data-name="Back" style="left: 0.400399%; top: 5.6%; width: 2.9%; height: 4.5%;">
+          <!-- Hotspots (adjust in Teacher View). Starting set below -->
+          <div class="hotspot" data-name="Back"           style="left: 0.4%;  top: 5.6%; width: 2.9%; height: 4.5%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot solved correct" data-name="Forward" style="left: 3.6%; top: 5.6%; width: 2.9%; height: 4.52753%;">
+          <div class="hotspot" data-name="Forward"        style="left: 3.6%;  top: 5.6%; width: 2.9%; height: 4.5%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot solved correct" data-name="Refresh" style="left: 6.5%; top: 5.75583%; width: 2.9%; height: 4.44417%;">
+          <div class="hotspot" data-name="Refresh"        style="left: 6.5%;  top: 5.8%; width: 2.9%; height: 4.4%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot solved correct" data-name="Home" style="left: 9.6%; top: 5.6%; width: 2.9%; height: 4.6%;">
-            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
-            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
-            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
-          </div>
-
-          <div class="hotspot solved correct" data-name="Close Tab" style="left: 57.1%; top: 0.703886%; width: 2.8%; height: 4%;">
-            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
-            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
-            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
-          </div>
-          <div class="hotspot solved correct selected" data-name="New Tab" style="left: 60.1002%; top: 0.551943%; width: 2.8%; height: 4%;">
+          <div class="hotspot" data-name="Home"           style="left: 9.6%;  top: 5.6%; width: 2.9%; height: 4.6%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
 
-          <div class="hotspot solved correct" data-name="Bookmarks" style="left: 75.0486%; top: 5.5%; width: 2.9%; height: 4.6%;">
+          <div class="hotspot" data-name="Close Tab"      style="left:57.1%;  top: 0.7%; width: 2.8%; height: 4%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot solved correct" data-name="Add-ons" style="left: 82.1874%; top: 5.83926%; width: 3%; height: 4.1%;">
-            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
-            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
-            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
-          </div>
-          <div class="hotspot solved correct" data-name="Menu" style="left: 97.1953%; top: 5.84087%; width: 2.8%; height: 4.1%;">
+          <div class="hotspot" data-name="New Tab"        style="left:60.1%;  top: 0.55%; width: 2.8%; height: 4%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
 
-          <div class="hotspot solved correct" data-name="Minimize" style="left: 89.7062%; top: 0%; width: 2.7%; height: 5.1%;">
+          <div class="hotspot" data-name="Bookmarks"      style="left:75.05%; top: 5.5%; width: 2.9%; height: 4.6%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot solved correct" data-name="Maximize" style="left: 93.2838%; top: 0%; width: 2.7%; height: 5.1%;">
+          <div class="hotspot" data-name="Add-ons"        style="left:82.19%; top: 5.84%; width: 3%; height: 4.1%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot solved correct" data-name="Close Window" style="left: 97.1513%; top: 0%; width: 2.7%; height: 5.1%;">
+          <div class="hotspot" data-name="Menu"           style="left:97.20%; top: 5.84%; width: 2.8%; height: 4.1%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
 
-          <div class="hotspot solved correct" data-name="Bookmarks Bar" style="left: 0%; top: 11.2%; width: 99.3%; height: 3.22914%;">
+          <div class="hotspot" data-name="Minimize"       style="left:89.71%; top: 0%; width: 2.7%; height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Maximize"       style="left:93.28%; top: 0%; width: 2.7%; height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Close Window"   style="left:97.15%; top: 0%; width: 2.7%; height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+
+          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 0%; top: 11.2%; width: 99.3%; height: 3.23%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
         </div>
 
-        <!-- Zoom -->
         <div class="zoom">
           <button id="zoomOut">−</button>
           <span class="tip">Zoom</span>
@@ -191,27 +223,15 @@
         </div>
 
         <!-- Teacher Editor -->
-        <div id="editor" class="editor" style="display: grid;">
+        <div id="editor" class="editor">
           <div class="field">
             <label for="hsSelect">Hotspot</label>
-            <select id="hsSelect"><option value="Back">Back</option><option value="Forward">Forward</option><option value="Refresh">Refresh</option><option value="Home">Home</option><option value="Close Tab">Close Tab</option><option value="New Tab">New Tab</option><option value="Bookmarks">Bookmarks</option><option value="Add-ons">Add-ons</option><option value="Menu">Menu</option><option value="Minimize">Minimize</option><option value="Maximize">Maximize</option><option value="Close Window">Close Window</option><option value="Bookmarks Bar">Bookmarks Bar</option></select>
+            <select id="hsSelect"></select>
           </div>
-          <div class="field">
-            <label for="leftInp">Left %</label>
-            <input id="leftInp" type="number" step="0.1" min="0" max="100">
-          </div>
-          <div class="field">
-            <label for="topInp">Top %</label>
-            <input id="topInp" type="number" step="0.1" min="0" max="100">
-          </div>
-          <div class="field">
-            <label for="widthInp">Width %</label>
-            <input id="widthInp" type="number" step="0.1" min="0" max="100">
-          </div>
-          <div class="field">
-            <label for="heightInp">Height %</label>
-            <input id="heightInp" type="number" step="0.1" min="0" max="100">
-          </div>
+          <div class="field"><label for="leftInp">Left %</label><input id="leftInp" type="number" step="0.1" min="0" max="100"></div>
+          <div class="field"><label for="topInp">Top %</label><input id="topInp" type="number" step="0.1" min="0" max="100"></div>
+          <div class="field"><label for="widthInp">Width %</label><input id="widthInp" type="number" step="0.1" min="0" max="100"></div>
+          <div class="field"><label for="heightInp">Height %</label><input id="heightInp" type="number" step="0.1" min="0" max="100"></div>
 
           <div class="btnrow">
             <button id="nudgeUp">↑</button>
@@ -225,16 +245,19 @@
             <button id="copyStyle">Copy style</button>
             <button id="downloadHtml">Download updated file</button>
           </div>
-          <div id="cursorHud" class="cursorHud">Cursor: x 51.3% • y 97.9%</div>
+          <div id="cursorHud" class="cursorHud">Cursor: x --% • y --%</div>
         </div>
 
-        <p class="tip">Teacher View lets you select any hotspot, see its %, and drag/resize with the blue handles. Use “Download updated file” to save your edits, then re-upload to GitHub.</p>
+        <p class="tip">Toggle Teacher View to outline hotspots and edit them. Download the updated file to save your changes.</p>
       </div>
     </div>
   </div>
 
 <script>
 (function(){
+  /* ===== Password for Teacher View ===== */
+  const ACCESS_CODE = "rigby"; // case-insensitive
+
   // Elements
   const scoreEl = document.getElementById('score');
   const totalEl = document.getElementById('total');
@@ -253,7 +276,7 @@
   const zoomIn = document.getElementById('zoomIn');
   const zoomOut = document.getElementById('zoomOut');
 
-  // Editor controls
+  // Editor
   const editor = document.getElementById('editor');
   const hsSelect = document.getElementById('hsSelect');
   const leftInp = document.getElementById('leftInp');
@@ -263,218 +286,200 @@
   const copyBtn = document.getElementById('copyStyle');
   const dlBtn = document.getElementById('downloadHtml');
   const cursorHud = document.getElementById('cursorHud');
-  const nudge = (id,dx,dy,dw,dh)=> document.getElementById(id).addEventListener('click', ()=> adjustSelected(dx,dy,dw,dh));
+  const nudge = (id,dx,dy,dw,dh)=>document.getElementById(id).addEventListener('click',()=>adjustSelected(dx,dy,dw,dh));
   nudge('nudgeUp',0,-0.2,0,0); nudge('nudgeDown',0,0.2,0,0); nudge('nudgeLeft',-0.2,0,0,0); nudge('nudgeRight',0.2,0,0,0);
   nudge('growW',0,0,0.2,0); nudge('shrinkW',0,0,-0.2,0); nudge('growH',0,0,0,0.2); nudge('shrinkH',0,0,0,-0.2);
 
   // State
-  const ALL = hotspots.map(h => h.dataset.name);
+  const ALL = hotspots.map(h=>h.dataset.name);
   totalEl.textContent = ALL.length;
-  let remaining = [], current = null, score = 0, start = Date.now(), timer = null;
-  let imgWidth = 1300;
-  let selected = null, dragMode = null; // 'move' or 'resize:dir'
-  let dragStart = null, startBox = null;
+  let remaining=[], current=null, score=0, start=Date.now(), timer=null;
+  let imgWidth=1300;
+  let selected=null, dragMode=null, dragStart=null, startBox=null;
 
-  function fmt(ms){ const s=Math.floor(ms/1000), m=String(Math.floor(s/60)).padStart(2,'0'), r=String(s%60).padStart(2,'0'); return `${m}:${r}`; }
+  function fmt(ms){const s=Math.floor(ms/1000),m=String(Math.floor(s/60)).padStart(2,'0'),r=String(s%60).padStart(2,'0');return `${m}:${r}`;}
   function tick(){ clockEl.textContent = fmt(Date.now()-start); }
-
-  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
   function resetGame(){
-    hotspots.forEach(h=> h.classList.remove('solved','correct','wrong'));
-    score = 0; scoreEl.textContent = '0';
+    hotspots.forEach(h=>h.classList.remove('solved','correct','wrong','selected'));
+    score=0; scoreEl.textContent='0';
     remaining = shuffle(ALL.slice());
-    current = null;
+    current=null;
     deck.classList.remove('flipped');
-    cardWord.textContent = 'Flip for a word';
-    feedback.textContent = '';
-    start = Date.now(); clearInterval(timer); timer = setInterval(tick,250);
+    cardWord.textContent='flip for a word';
+    feedback.textContent='';
+    start=Date.now(); clearInterval(timer); timer=setInterval(tick,250);
     resizeCanvas();
   }
 
   function dealNext(){
-    if(remaining.length === 0){
-      feedback.textContent = '🎉 All done! You found every icon!';
-      feedback.className = 'feedback ok';
-      deck.classList.remove('flipped'); cardWord.textContent = 'Complete!';
+    if(remaining.length===0){
+      feedback.textContent='🎉 all done! you found every icon!';
+      feedback.className='feedback ok';
+      deck.classList.remove('flipped'); cardWord.textContent='complete!';
       clearInterval(timer); fireConfetti(); return;
     }
-    current = remaining.pop(); cardWord.textContent = current;
-    feedback.textContent = ''; feedback.className = 'feedback';
+    current = remaining.pop();
+    cardWord.textContent = current.toLowerCase();   // lower-case on the card
+    feedback.textContent=''; feedback.className='feedback';
   }
 
-  // Deck
+  // Deck flip
   deck.addEventListener('click', ()=>{
     deck.classList.toggle('flipped');
     if(deck.classList.contains('flipped') && !current) dealNext();
   });
 
-  // Gameplay clicks (disabled while Teacher View ON)
+  // Gameplay (disabled while Teacher View ON)
   hotspots.forEach(h=>{
     h.addEventListener('click', (e)=>{
-      if(teacherChk.checked){
+      if(isTeacherOn()){
         selectHotspot(h); e.stopPropagation(); return;
       }
-      if(!current){ feedback.textContent='Flip a card to get a word!'; feedback.className='feedback bad'; return; }
-      if(h.classList.contains('solved')){ feedback.textContent='Already labeled.'; feedback.className='feedback'; return; }
-      if(h.dataset.name === current){
-        h.classList.add('solved','correct'); score += 1; scoreEl.textContent = String(score);
-        feedback.textContent='✅ Correct!'; feedback.className='feedback ok';
+      if(!current){ feedback.textContent='flip a card to get a word!'; feedback.className='feedback bad'; return; }
+      if(h.classList.contains('solved')){ feedback.textContent='already labeled.'; feedback.className='feedback'; return; }
+      if(h.dataset.name===current){
+        h.classList.add('solved','correct'); score+=1; scoreEl.textContent=String(score);
+        feedback.textContent='✅ correct!'; feedback.className='feedback ok';
         setTimeout(()=>{ deck.classList.remove('flipped'); setTimeout(()=>{ dealNext(); deck.classList.add('flipped'); },200); },650);
       } else {
-        h.classList.add('wrong'); feedback.textContent='❌ Not that one. Try again!'; feedback.className='feedback bad';
-        setTimeout(()=> h.classList.remove('wrong'),700);
+        h.classList.add('wrong'); feedback.textContent='❌ not that one. try again!'; feedback.className='feedback bad';
+        setTimeout(()=>h.classList.remove('wrong'),700);
       }
     });
   });
 
-  // Teacher View toggle
+  /* ===== Password-gated Teacher View ===== */
+  function isTeacherOn(){ return rightCard.classList.contains('teach'); }
+  function enableTeacher(){
+    rightCard.classList.add('teach');
+    editor.style.display = 'grid';
+    if(!selected) selectHotspot(hotspots[0]);
+  }
+  function disableTeacher(){
+    rightCard.classList.remove('teach');
+    editor.style.display = 'none';
+    hotspots.forEach(h => h.classList.remove('selected'));
+    selected = null;
+  }
   teacherChk.addEventListener('change', ()=>{
-    rightCard.classList.toggle('teach', teacherChk.checked);
-    editor.style.display = teacherChk.checked ? 'grid' : 'none';
+    if (teacherChk.checked) {
+      // Already unlocked this tab?
+      if (sessionStorage.getItem('teacherOK') === '1') { enableTeacher(); return; }
+      const code = (prompt("Enter teacher password:") || "").trim().toLowerCase();
+      if (code === ACCESS_CODE.toLowerCase()) {
+        sessionStorage.setItem('teacherOK','1'); // remember until tab closes
+        enableTeacher();
+      } else {
+        feedback.textContent = '🔒 Incorrect password.';
+        feedback.className = 'feedback bad';
+        teacherChk.checked = false;
+      }
+    } else {
+      disableTeacher();
+    }
   });
 
-  // Populate select
-  ALL.forEach(name=>{
-    const opt = document.createElement('option'); opt.value = name; opt.textContent = name; hsSelect.appendChild(opt);
-  });
+  // Populate dropdown
+  ALL.forEach(name=>{ const opt=document.createElement('option'); opt.value=name; opt.textContent=name; hsSelect.appendChild(opt); });
   hsSelect.addEventListener('change', ()=> selectHotspot(hotspots.find(h=>h.dataset.name===hsSelect.value)));
 
-  // Selecting a hotspot
+  // Selecting hotspot
   function selectHotspot(el){
-    hotspots.forEach(h=> h.classList.remove('selected'));
-    selected = el; if(!selected) return;
-    selected.classList.add('selected');
-    hsSelect.value = selected.dataset.name;
-    const st = window.getComputedStyle(selected);
-    leftInp.value   = pct(st.left , 'x');
-    topInp.value    = pct(st.top  , 'y');
-    widthInp.value  = pct(st.width, 'x');
-    heightInp.value = pct(st.height,'y');
+    hotspots.forEach(h=>h.classList.remove('selected'));
+    selected=el; if(!selected) return;
+    selected.classList.add('selected'); hsSelect.value=selected.dataset.name;
+    const st=getComputedStyle(selected);
+    leftInp.value=pct(st.left,'x'); topInp.value=pct(st.top,'y'); widthInp.value=pct(st.width,'x'); heightInp.value=pct(st.height,'y');
   }
-  function pct(px, axis){
-    const num = parseFloat(px);
-    const rect = bg.getBoundingClientRect();
-    return (axis==='x' ? (num/rect.width*100) : (num/rect.height*100)).toFixed(1);
-  }
-  function setBox(el, L,T,W,H){
-    const clamp=(v)=> Math.max(0, Math.min(100, v));
-    el.style.left = clamp(L)+'%'; el.style.top = clamp(T)+'%';
-    el.style.width = clamp(W)+'%'; el.style.height = clamp(H)+'%';
-    // update inputs
+  function pct(px,axis){ const n=parseFloat(px), r=bg.getBoundingClientRect(); return (axis==='x'?(n/r.width*100):(n/r.height*100)).toFixed(1); }
+  function setBox(el,L,T,W,H){
+    const clamp=v=>Math.max(0,Math.min(100,v));
+    el.style.left=clamp(L)+'%'; el.style.top=clamp(T)+'%'; el.style.width=clamp(W)+'%'; el.style.height=clamp(H)+'%';
     leftInp.value=L.toFixed(1); topInp.value=T.toFixed(1); widthInp.value=W.toFixed(1); heightInp.value=H.toFixed(1);
   }
-  // number inputs -> update box
   [leftInp,topInp,widthInp,heightInp].forEach(inp=>{
-    inp.addEventListener('input', ()=>{
-      if(!selected) return;
-      setBox(selected, parseFloat(leftInp.value||0), parseFloat(topInp.value||0), parseFloat(widthInp.value||0), parseFloat(heightInp.value||0));
-    });
+    inp.addEventListener('input', ()=>{ if(!selected) return; setBox(selected, parseFloat(leftInp.value||0), parseFloat(topInp.value||0), parseFloat(widthInp.value||0), parseFloat(heightInp.value||0)); });
   });
 
-  // Drag/resize with handles in Teacher View
+  // Drag/resize handles
   game.addEventListener('mousedown', (e)=>{
-    if(!teacherChk.checked) return;
+    if(!isTeacherOn()) return;
     const handle = e.target.closest('.handle');
-    const hs = e.target.closest('.hotspot');
-    if(!hs) return;
+    const hs = e.target.closest('.hotspot'); if(!hs) return;
     selectHotspot(hs);
-
-    const rect = bg.getBoundingClientRect();
-    const st = window.getComputedStyle(hs);
-    startBox = {
-      L: parseFloat(leftInp.value), T: parseFloat(topInp.value),
-      W: parseFloat(widthInp.value), H: parseFloat(heightInp.value),
-      rect
-    };
-    dragStart = { x:e.clientX, y:e.clientY };
-
-    if(handle){ dragMode = 'resize:'+handle.dataset.dir; }
-    else { dragMode = 'move'; }
+    const rect=bg.getBoundingClientRect();
+    startBox={L:+leftInp.value,T:+topInp.value,W:+widthInp.value,H:+heightInp.value,rect};
+    dragStart={x:e.clientX,y:e.clientY};
+    dragMode = handle ? 'resize:'+handle.dataset.dir : 'move';
     e.preventDefault();
   });
   window.addEventListener('mousemove', (e)=>{
-    if(!teacherChk.checked || !selected || !dragMode) return;
-    const dx = (e.clientX - dragStart.x) / startBox.rect.width * 100;
-    const dy = (e.clientY - dragStart.y) / startBox.rect.height * 100;
-
-    let L=startBox.L, T=startBox.T, W=startBox.W, H=startBox.H;
-
-    if(dragMode==='move'){ L += dx; T += dy; }
+    if(!isTeacherOn() || !selected || !dragMode) return;
+    const dx=(e.clientX-dragStart.x)/startBox.rect.width*100;
+    const dy=(e.clientY-dragStart.y)/startBox.rect.height*100;
+    let {L,T,W,H} = startBox;
+    if(dragMode==='move'){ L+=dx; T+=dy; }
     else{
-      const dir = dragMode.split(':')[1];
-      if(dir.includes('w')){ L += dx; W -= dx; }
-      if(dir.includes('e')){ W += dx; }
-      if(dir.includes('n')){ T += dy; H -= dy; }
-      if(dir.includes('s')){ H += dy; }
+      const dir=dragMode.split(':')[1];
+      if(dir.includes('w')){ L+=dx; W-=dx; }
+      if(dir.includes('e')){ W+=dx; }
+      if(dir.includes('n')){ T+=dy; H-=dy; }
+      if(dir.includes('s')){ H+=dy; }
     }
     setBox(selected,L,T,W,H);
   });
   window.addEventListener('mouseup', ()=>{ dragMode=null; });
 
-  // Cursor HUD (always shows in Teacher View)
+  // Cursor HUD (Teacher View)
   game.addEventListener('mousemove', (e)=>{
-    if(!teacherChk.checked) return;
-    const r = bg.getBoundingClientRect();
-    const x = ((e.clientX - r.left)/r.width)*100;
-    const y = ((e.clientY - r.top)/r.height)*100;
-    if(isFinite(x) && isFinite(y)) cursorHud.textContent = `Cursor: x ${x.toFixed(1)}% • y ${y.toFixed(1)}%`;
+    if(!isTeacherOn()) return;
+    const r=bg.getBoundingClientRect(); const x=((e.clientX-r.left)/r.width)*100; const y=((e.clientY-r.top)/r.height)*100;
+    if(isFinite(x)&&isFinite(y)) cursorHud.textContent=`Cursor: x ${x.toFixed(1)}% • y ${y.toFixed(1)}%`;
   });
 
-  // Adjust selected by buttons
   function adjustSelected(dx,dy,dw,dh){
     if(!selected) return;
-    setBox(selected,
-      parseFloat(leftInp.value)+dx,
-      parseFloat(topInp.value)+dy,
-      parseFloat(widthInp.value)+dw,
-      parseFloat(heightInp.value)+dh
-    );
+    setBox(selected, +leftInp.value+dx, +topInp.value+dy, +widthInp.value+dw, +heightInp.value+dh);
   }
 
-  // Copy style
+  // Copy style + download
   copyBtn.addEventListener('click', ()=>{
     if(!selected) return;
     const s = selected.getAttribute('style');
-    navigator.clipboard.writeText(s).then(()=> {
-      feedback.textContent='Copied current style to clipboard! Paste back into the HTML to save.'; feedback.className='feedback ok';
-    });
+    navigator.clipboard.writeText(s).then(()=>{ feedback.textContent='Copied current style to clipboard!'; feedback.className='feedback ok'; });
   });
-
-  // Download updated HTML (persists your current % edits)
   dlBtn.addEventListener('click', ()=>{
-    const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
-    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='index.html'; a.click();
-    URL.revokeObjectURL(a.href);
+    const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='index.html'; a.click(); URL.revokeObjectURL(a.href);
   });
 
   // Zoom
-  function setImgWidth(w){ imgWidth = Math.max(900, Math.min(1800, w)); document.documentElement.style.setProperty('--imgw', imgWidth+'px'); resizeCanvas(); }
+  function setImgWidth(w){ imgWidth=Math.max(900,Math.min(1800,w)); document.documentElement.style.setProperty('--imgw',imgWidth+'px'); resizeCanvas(); }
   zoomIn.addEventListener('click', ()=> setImgWidth(imgWidth+100));
   zoomOut.addEventListener('click', ()=> setImgWidth(imgWidth-100));
 
   // Confetti
-  let confettiBits = [];
-  function resizeCanvas(){ const r = rightCard.getBoundingClientRect(); confetti.width=r.width; confetti.height=r.height; }
+  let confettiBits=[];
+  function resizeCanvas(){ const r=rightCard.getBoundingClientRect(); confetti.width=r.width; confetti.height=r.height; }
   function fireConfetti(){
-    resizeCanvas(); const W=confetti.width, H=confetti.height;
-    confettiBits = Array.from({length:200}, ()=>({x:Math.random()*W,y:-10-Math.random()*H*.3,r:4+Math.random()*4,vx:-1.5+Math.random()*3,vy:2+Math.random()*3,a:Math.random()*Math.PI*2}));
-    requestAnimationFrame(loop);
-    setTimeout(()=> confettiBits=[], 2500);
+    resizeCanvas(); const W=confetti.width,H=confetti.height;
+    confettiBits=Array.from({length:200},()=>({x:Math.random()*W,y:-10-Math.random()*H*.3,r:4+Math.random()*4,vx:-1.5+Math.random()*3,vy:2+Math.random()*3,a:Math.random()*Math.PI*2}));
+    requestAnimationFrame(loop); setTimeout(()=> confettiBits=[],2500);
   }
   function loop(){
     if(!confettiBits.length) return;
     const W=confetti.width,H=confetti.height; ctx.clearRect(0,0,W,H);
-    for(const p of confettiBits){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.05; p.a+=0.1; ctx.fillStyle=`hsl(${((p.y/2)+p.x)%360},90%,60%)`; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r); ctx.restore(); }
+    for(const p of confettiBits){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.05; p.a+=0.1;
+      ctx.fillStyle=`hsl(${((p.y/2)+p.x)%360},90%,60%)`; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r); ctx.restore();
+    }
     requestAnimationFrame(loop);
   }
 
-  // Init
+  // Init (Teacher View OFF; no pre-select)
   resetGame();
-  // Preselect first hotspot in Teacher View for convenience
-  hsSelect.value = ALL[0]; selectHotspot(hotspots[0]);
 })();
 </script>
-
-
-<!----comment node----><div id="give-freely-root-mbnbehikldjhnfehhnaidhjhoofhpehk" class="give-freely-root" data-extension-id="mbnbehikldjhnfehhnaidhjhoofhpehk" data-extension-name="CSS Peeper" style="display: block;"></div><scribe-shadow id="crxjs-ext" data-crx="okfkdaglfjjjfefdcppliegebpoegaii" style="position: fixed; width: 0px; height: 0px; top: 0px; left: 0px; z-index: 2147483647; overflow: visible; visibility: visible;"></scribe-shadow></body><dubble-extension id="__dubble0394030940.54566541731947771759436487478"></dubble-extension><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
+</body>
+</html>
