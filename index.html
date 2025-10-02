@@ -3,227 +3,255 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Find the Chrome Icon (Screenshot Version)</title>
+<title>Second Grade STEM: Identifying Browser Icons</title>
+
+<!-- Cute, kid-friendly display font for the title -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-  :root { --bg:#f6f7fb; --ink:#111827; --muted:#6b7280; --ok:#22c55e; --bad:#ef4444; --line:#e5e7eb; }
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
+    --ok:#22c55e; --bad:#ef4444; --brand:#7c3aed; /* purple accent */
+    --glow: 0 0 0 4px rgba(34,197,94,.25), 0 8px 18px rgba(34,197,94,.25);
+  }
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
   .wrap{max-width:1100px;margin:24px auto;padding:16px}
-  .card{background:#fff;border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.08);padding:16px}
-  h1{margin:0 0 8px}
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .title{
+    font-family:Fredoka, cursive; text-align:center; margin:0 0 12px;
+    font-size:clamp(22px, 3.6vw, 44px); line-height:1.1; color:#111;
+  }
+  .subtitle{ text-align:center; margin:0 0 16px; color:var(--muted) }
+
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
   .hud{display:flex;gap:12px;align-items:center;color:var(--muted);font-weight:600}
   .hud strong{color:var(--ink)}
-  button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px}
+  button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px}
   label{display:inline-flex;gap:8px;align-items:center}
-  input[type="checkbox"]{scale:1.2}
-  .feedback{min-height:24px;font-weight:700;margin-top:8px}
-  .feedback.ok{color:var(--ok)} .feedback.bad{color:var(--bad)}
+  input[type="checkbox"]{scale:1.15}
+
+  .grid{display:grid;grid-template-columns: 360px 1fr; gap:16px; align-items:start}
+  @media (max-width:920px){ .grid{grid-template-columns: 1fr} }
+
+  .card{background:var(--card);border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.08);padding:16px}
+
+  /* ===== Flip Card Deck ===== */
+  .deckWrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .deck{width:320px;height:180px;position:relative;perspective:1200px}
+  .cardFace{
+    position:absolute; inset:0; display:grid; place-items:center; border-radius:16px;
+    border:1px solid var(--line); backface-visibility:hidden; transition:transform .6s ease;
+    font-family:Fredoka, cursive;
+  }
+  .backFace{ background:linear-gradient(135deg,#f1f5f9,#e9d5ff); color:#4c1d95; font-size:24px; }
+  .frontFace{ background:#ffffff; color:#111; font-size:28px; transform:rotateY(180deg); }
+  .deck.flipped .backFace{ transform:rotateY(180deg); }
+  .deck.flipped .frontFace{ transform:rotateY(0deg); }
+
+  .dealTip{font-size:13px;color:var(--muted);text-align:center}
+
+  /* ===== Game image & hotspots ===== */
   .game{position:relative;display:inline-block;line-height:0;user-select:none}
   .game img{max-width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
-  /* Hotspots are absolutely positioned relative to .game (which sizes to the image) */
   .hotspot{
-    position:absolute;
-    border:2px solid transparent; /* shows in Teacher View */
-    border-radius:8px;
-    cursor:pointer;
-    box-sizing:border-box;
+    position:absolute; border:2px solid transparent; border-radius:8px; cursor:pointer; box-sizing:border-box;
   }
-  .teach .hotspot{border-color:rgba(37,99,235,.5)}
-  .hotspot.correct{outline:3px solid var(--ok);outline-offset:1.5px}
-  .hotspot.wrong{outline:3px solid var(--bad);outline-offset:1.5px}
-  .hotspot::after{ /* label badge in Teacher View */
+  .teach .hotspot{border-color:rgba(37,99,235,.55)}
+  .hotspot.correct{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:var(--glow)}
+  .hotspot.wrong{outline:3px solid var(--bad); outline-offset:1.5px}
+  /* After a hotspot is solved, keep it labeled & softly highlighted */
+  .hotspot.solved{
+    outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:var(--glow); background:rgba(34,197,94,.08);
+  }
+  .hotspot.solved::after{
     content:attr(data-name);
-    position:absolute; left:0; top:-22px;
-    padding:2px 6px; font-size:11px; background:#111827; color:#fff; border-radius:6px; white-space:nowrap; display:none;
+    position:absolute; left:0; top:-22px; transform:translateY(-2px);
+    padding:2px 6px; font-size:12px; font-weight:700;
+    background:#16a34a; color:#fff; border-radius:6px; white-space:nowrap;
   }
-  .teach .hotspot::after{display:block}
-  .cursorHud{
-    position:absolute; right:8px; bottom:8px; font-size:12px; background:rgba(17,24,39,.85); color:#fff;
-    padding:6px 8px; border-radius:8px; display:none;
-  }
-  .teach .cursorHud{display:block}
-  .tip{font-size:12px;color:var(--muted)}
+
+  .feedback{min-height:24px;font-weight:700;margin-top:8px;text-align:center}
+  .feedback.ok{color:var(--ok)} .feedback.bad{color:var(--bad)}
+
+  .tip{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Browser Icon Hunt (Your Screenshot)</h1>
-      <div class="row">
-        <div class="hud">
-          <span>Find: <strong id="targetLabel">Refresh</strong></span>
-          <span>| Score: <strong id="score">0</strong></span>
-          <span>| Time: <strong id="clock">00:00</strong></span>
+    <h1 class="title">Second Grade STEM: <span style="color:var(--brand)">Identifying Browser Icons</span></h1>
+    <p class="subtitle">Flip a card to see the icon name. Click the matching spot on the browser!</p>
+
+    <div class="row">
+      <div class="hud">
+        <span>Score: <strong id="score">0</strong>/<strong id="total">13</strong></span>
+        <span>• Time: <strong id="clock">00:00</strong></span>
+      </div>
+      <button id="restart">Restart</button>
+      <label><input type="checkbox" id="teacher"> <span>Teacher View</span></label>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Flip-card deck -->
+      <div class="card deckWrap">
+        <div id="deck" class="deck" role="button" aria-label="Card deck (click to flip)">
+          <div class="cardFace backFace">Click to flip a card ✨</div>
+          <div class="cardFace frontFace" id="cardWord">Refresh</div>
         </div>
-        <button id="next">Next</button>
-        <button id="restart">Restart</button>
-        <label><input type="checkbox" id="teacher"> <span>Teacher View</span></label>
-        <span class="tip">Teacher View shows boxes & live % coords to adjust positions.</span>
+        <div class="dealTip">Tip: Click the card to reveal the next icon name.</div>
+        <div id="feedback" class="feedback"></div>
       </div>
 
-      <div id="feedback" class="feedback"></div>
+      <!-- RIGHT: Screenshot game -->
+      <div id="rightCard" class="card">
+        <div id="game" class="game">
+          <!-- Replace with your own screenshot if needed -->
+          <img id="bg" src="chrome.png" alt="Chrome screenshot">
 
-      <!-- GAME -->
-      <div id="game" class="game">
-        <!-- 🔁 Replace with your screenshot file name if different -->
-        <img id="bg" src="chrome.png" alt="Chrome screenshot for icon hunt">
+          <!-- Hotspots aligned in percentages (adjust if your image differs) -->
+          <div class="hotspot" data-name="Back"           style="left: 2.3%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
+          <div class="hotspot" data-name="Forward"        style="left: 5.1%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
+          <div class="hotspot" data-name="Refresh"        style="left: 7.8%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
+          <div class="hotspot" data-name="Home"           style="left:10.6%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
 
-        <!-- All 13 hotspots (positions are % placeholders; tweak to your image) -->
-        <!-- Use left/top/width/height in PERCENTAGES so it stays aligned when embedded -->
-        <div class="hotspot" data-name="Back"           style="left: 2.8%;  top: 8.0%; width: 3.2%;  height: 7.5%;"></div>
-        <div class="hotspot" data-name="Forward"        style="left: 6.6%;  top: 8.0%; width: 3.2%;  height: 7.5%;"></div>
-        <div class="hotspot" data-name="Refresh"        style="left:10.4%;  top: 8.0%; width: 3.2%;  height: 7.5%;"></div>
-        <div class="hotspot" data-name="Home"           style="left:14.2%;  top: 8.0%; width: 3.2%;  height: 7.5%;"></div>
+          <div class="hotspot" data-name="New Tab"        style="left:60.6%;  top: 2.2%; width: 2.6%;  height: 5.6%;"></div>
+          <div class="hotspot" data-name="Close Tab"      style="left:55.9%;  top: 2.2%; width: 2.6%;  height: 5.6%;"></div>
 
-        <!-- New Tab (+) usually sits at right edge of last tab in tabstrip -->
-        <div class="hotspot" data-name="New Tab"        style="left:33.8%;  top: 18.0%; width: 3.2%;  height: 6.5%;"></div>
+          <div class="hotspot" data-name="Bookmarks"      style="left:82.0%;  top: 9.2%; width: 2.8%;  height: 6.8%;"></div>
+          <div class="hotspot" data-name="Add-ons"        style="left:85.0%;  top: 9.2%; width: 2.8%;  height: 6.8%;"></div>
+          <div class="hotspot" data-name="Menu"           style="left:88.0%;  top: 9.2%; width: 2.8%;  height: 6.8%;"></div>
 
-        <!-- Extensions (puzzle) and Menu (3 dots) on the right side of the toolbar -->
-        <div class="hotspot" data-name="Add-ons"        style="left:85.3%;  top: 18.0%; width: 3.5%;  height: 6.5%;"></div>
-        <div class="hotspot" data-name="Menu"           style="left:89.4%;  top: 18.0%; width: 2.8%;  height: 6.5%;"></div>
+          <div class="hotspot" data-name="Minimize"       style="left:92.0%;  top: 1.6%; width: 2.6%;  height: 5.0%;"></div>
+          <div class="hotspot" data-name="Maximize"       style="left:95.0%;  top: 1.6%; width: 2.6%;  height: 5.0%;"></div>
+          <div class="hotspot" data-name="Close Window"   style="left:98.0%;  top: 1.6%; width: 2.6%;  height: 5.0%;"></div>
 
-        <!-- Window controls (top-right) – these vary by OS; adjust to your theme -->
-        <div class="hotspot" data-name="Minimize"       style="left:93.0%;  top: 2.8%; width: 2.8%;  height: 5.5%;"></div>
-        <div class="hotspot" data-name="Maximize"       style="left:95.8%;  top: 2.8%; width: 2.8%;  height: 5.5%;"></div>
-        <div class="hotspot" data-name="Close Window"   style="left:98.6%;  top: 2.8%; width: 2.8%;  height: 5.5%;"></div>
+          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top:16.5%; width:98.0%; height: 6.8%;"></div>
+        </div>
 
-        <!-- Close Tab (the X on the active tab) – sits in the tab strip -->
-        <div class="hotspot" data-name="Close Tab"      style="left:29.0%;  top: 12.5%; width: 2.8%;  height: 5.5%;"></div>
-
-        <!-- Bookmarks star near omnibox; Bookmarks Bar is the whole row below -->
-        <div class="hotspot" data-name="Bookmarks"      style="left:78.8%;  top: 18.0%; width: 2.8%;  height: 6.5%;"></div>
-        <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top: 27.5%; width: 98.0%; height: 7.0%;"></div>
-
-        <!-- live coordinate helper (Teacher View) -->
-        <div id="cursorHud" class="cursorHud">x: --% • y: --% • w: --% • h: --%</div>
+        <p class="tip">Teacher View outlines hotspots; use GitHub later to fine-tune % if needed.</p>
       </div>
     </div>
   </div>
 
 <script>
 (function(){
-  // Canonical labels (picked from data-name attributes)
+  // ===== Elements
+  const scoreEl = document.getElementById('score');
+  const totalEl = document.getElementById('total');
+  const clockEl = document.getElementById('clock');
+  const restartBtn = document.getElementById('restart');
+  const teacherChk = document.getElementById('teacher');
+  const rightCard = document.getElementById('rightCard');
+  const feedback = document.getElementById('feedback');
+
+  const deck = document.getElementById('deck');
+  const cardWord = document.getElementById('cardWord');
+
   const game = document.getElementById('game');
-  const svgHud = document.getElementById('cursorHud');
-  const bg = document.getElementById('bg');
   const hotspots = Array.from(game.querySelectorAll('.hotspot'));
 
-  const targetLabelEl = document.getElementById('targetLabel');
-  const scoreEl = document.getElementById('score');
-  const feedback = document.getElementById('feedback');
-  const nextBtn = document.getElementById('next');
-  const restartBtn = document.getElementById('restart');
-  const teacher = document.getElementById('teacher');
-  const card = document.querySelector('.card');
+  // ===== State
+  const ALL = hotspots.map(h => h.dataset.name);
+  totalEl.textContent = ALL.length;
 
-  const choices = hotspots.map(h => h.dataset.name);
+  let remaining = []; // remaining words in the deck
+  let current = null;
+  let score = 0;
+  let start = Date.now();
+  let timer = null;
 
-  let score = 0, start = Date.now(), timer = null, current = null;
+  function fmt(ms){
+    const s = Math.floor(ms/1000);
+    const m = String(Math.floor(s/60)).padStart(2,'0');
+    const r = String(s%60).padStart(2,'0');
+    return `${m}:${r}`;
+  }
+  function tick(){ clockEl.textContent = fmt(Date.now()-start); }
 
-  function fmt(ms){ const s=Math.floor(ms/1000), m=String(Math.floor(s/60)).padStart(2,'0'), r=String(s%60).padStart(2,'0'); return `${m}:${r}`; }
-  function tick(){ document.getElementById('clock').textContent = fmt(Date.now()-start); }
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
 
-  function chooseNewTarget(){
-    current = choices[Math.floor(Math.random()*choices.length)];
-    targetLabelEl.textContent = current;
+  function resetGame(){
+    // clear solved styles
+    hotspots.forEach(h=>{ h.classList.remove('solved','correct','wrong'); });
+    score = 0; scoreEl.textContent = '0';
+    remaining = shuffle(ALL.slice()); // fresh shuffled deck
+    current = null;
+    deck.classList.remove('flipped');
+    cardWord.textContent = 'Flip for a word';
+    feedback.textContent = '';
+    start = Date.now(); clearInterval(timer); timer = setInterval(tick, 250);
+  }
+
+  function dealNext(){
+    if(remaining.length === 0){
+      feedback.textContent = '🎉 All done! You found every icon!';
+      feedback.className = 'feedback ok';
+      deck.classList.remove('flipped');
+      cardWord.textContent = 'Complete!';
+      clearInterval(timer);
+      return;
+    }
+    current = remaining.pop();           // take from the “top” of the pile
+    cardWord.textContent = current;
     feedback.textContent = '';
     feedback.className = 'feedback';
   }
 
-  function startTimer(){ clearInterval(timer); start = Date.now(); timer = setInterval(tick,250); }
+  // Flip-card behavior
+  deck.addEventListener('click', ()=>{
+    // flip animation
+    deck.classList.toggle('flipped');
+    if(deck.classList.contains('flipped')){
+      // If we flipped to show the front and there’s no current word, deal
+      if(!current) dealNext();
+    }
+  });
 
-  // Click handling
-  hotspots.forEach(el=>{
-    el.addEventListener('click', e=>{
-      if(!current) return;
-      const name = el.dataset.name;
-      if(name === current){
-        el.classList.remove('wrong'); el.classList.add('correct');
-        score += 1; scoreEl.textContent = String(score);
-        feedback.textContent = '✅ Correct!'; feedback.className = 'feedback ok';
-        setTimeout(()=>{ el.classList.remove('correct'); chooseNewTarget(); }, 800);
-      } else {
-        el.classList.remove('correct'); el.classList.add('wrong');
-        feedback.textContent = '❌ Try again!'; feedback.className = 'feedback bad';
-        setTimeout(()=>{ el.classList.remove('wrong'); }, 700);
+  // Hotspot click handling
+  hotspots.forEach(h=>{
+    h.addEventListener('click', ()=>{
+      if(!current){ // no card dealt yet
+        feedback.textContent = 'Flip a card to get a word to find!';
+        feedback.className = 'feedback bad';
+        return;
       }
-      e.stopPropagation();
+      const name = h.dataset.name;
+      if(h.classList.contains('solved')){
+        // already solved; ignore but keep it positive
+        feedback.textContent = 'Nice! That one is already labeled.';
+        feedback.className = 'feedback';
+        return;
+      }
+      if(name === current){
+        // correct: highlight and label this hotspot; auto-deal next
+        h.classList.remove('wrong'); h.classList.add('solved','correct');
+        score += 1; scoreEl.textContent = String(score);
+        feedback.textContent = '✅ Correct!';
+        feedback.className = 'feedback ok';
+        // auto-deal the next word after a beat; flip card back so they can flip again
+        setTimeout(()=>{
+          deck.classList.remove('flipped'); // turn card face down
+          setTimeout(()=>{ dealNext(); deck.classList.add('flipped'); }, 200); // flip back up with a new word
+        }, 650);
+      } else {
+        h.classList.remove('correct'); h.classList.add('wrong');
+        feedback.textContent = '❌ That is not the card word. Try another spot!';
+        feedback.className = 'feedback bad';
+        setTimeout(()=> h.classList.remove('wrong'), 700);
+      }
     }, {passive:true});
   });
 
-  nextBtn.addEventListener('click', chooseNewTarget);
-  restartBtn.addEventListener('click', ()=>{ score=0; scoreEl.textContent='0'; chooseNewTarget(); startTimer(); });
-
-  teacher.addEventListener('change', ()=>{
-    card.classList.toggle('teach', teacher.checked);
-  });
-
-  // ===== Teacher View: live % coordinates under cursor =====
-  function updateCursorHud(evt){
-    // Get image's rendered box
-    const rect = bg.getBoundingClientRect();
-    const x = ((evt.clientX - rect.left) / rect.width) * 100;
-    const y = ((evt.clientY - rect.top)  / rect.height) * 100;
-
-    if(isFinite(x) && isFinite(y)){
-      svgHud.textContent = `x: ${x.toFixed(1)}% • y: ${y.toFixed(1)}% • w: select box • h: select box`;
-    }
-  }
-
-  // Show % when moving the mouse over the image
-  game.addEventListener('mousemove', e=>{
-    if(!teacher.checked) return;
-    updateCursorHud(e);
-  });
-
-  // Let you ALT+drag to resize the currently highlighted hotspot (quick fine-tune)
-  let active = null, dragging = false, startPos = null, startBox = null;
-
-  hotspots.forEach(h=>{
-    h.addEventListener('mousedown', e=>{
-      if(!teacher.checked) return;           // only in Teacher View
-      if(!e.altKey) return;                  // hold ALT to edit
-      active = h; dragging = true;
-      const rect = bg.getBoundingClientRect();
-      startPos = { x:e.clientX, y:e.clientY, rect };
-      const st = window.getComputedStyle(h);
-      startBox = {
-        left: parseFloat(st.left), top: parseFloat(st.top),
-        width: parseFloat(st.width), height: parseFloat(st.height)
-      };
-      e.preventDefault();
-    });
-  });
-
-  window.addEventListener('mousemove', e=>{
-    if(!dragging || !active) return;
-    const r = startPos.rect;
-    const dx = ((e.clientX - startPos.x) / r.width) * 100;
-    const dy = ((e.clientY - startPos.y) / r.height) * 100;
-
-    // If SHIFT held -> move; else -> resize
-    if(e.shiftKey){
-      const leftPct = ((startBox.left + (dx/100)*r.width) / r.width) * 100;
-      const topPct  = ((startBox.top  + (dy/100)*r.height)/ r.height)* 100;
-      active.style.left = `${leftPct.toFixed(1)}%`;
-      active.style.top  = `${topPct.toFixed(1)}%`;
-    } else {
-      const wPct = ((startBox.width  + (dx/100)*r.width) / r.width) * 100;
-      const hPct = ((startBox.height + (dy/100)*r.height)/ r.height)* 100;
-      active.style.width  = `${Math.max(1,wPct).toFixed(1)}%`;
-      active.style.height = `${Math.max(1,hPct).toFixed(1)}%`;
-    }
-    // update HUD to show the active box numbers
-    const st = window.getComputedStyle(active);
-    svgHud.textContent = `left:${parseFloat(st.left)/bg.getBoundingClientRect().width*100|0}% top:${parseFloat(st.top)/bg.getBoundingClientRect().height*100|0}% w:${parseFloat(st.width)/bg.getBoundingClientRect().width*100|0}% h:${parseFloat(st.height)/bg.getBoundingClientRect().height*100|0}%`;
-  });
-
-  window.addEventListener('mouseup', ()=>{
-    dragging = false; active = null;
-  });
+  // Controls
+  restartBtn.addEventListener('click', resetGame);
+  teacherChk.addEventListener('change', ()=> rightCard.classList.toggle('teach', teacherChk.checked));
 
   // Init
-  startTimer(); chooseNewTarget();
+  resetGame();
 })();
 </script>
 </body>
