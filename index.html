@@ -9,14 +9,12 @@
   :root{
     --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
     --ok:#22c55e; --bad:#ef4444; --brand:#7c3aed;
-    --imgw: 1200px; /* default screenshot width (you can change) */
+    --imgw: 1300px; /* default image width; use Zoom +/- to change */
   }
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
-  .wrap{max-width:1400px;margin:24px auto;padding:16px}
-  .title{
-    font-family:Fredoka, cursive; text-align:center; margin:0 0 8px;
-    font-size:clamp(22px, 3.6vw, 44px); line-height:1.1; color:#111;
-  }
+  .wrap{max-width:1600px;margin:24px auto;padding:16px}
+  .title{font-family:Fredoka, cursive; text-align:center; margin:0 0 8px;
+    font-size:clamp(22px, 3.6vw, 44px); line-height:1.1}
   .subtitle{ text-align:center; margin:0 0 16px; color:var(--muted) }
 
   .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
@@ -24,56 +22,57 @@
   .hud strong{color:var(--ink)}
   button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px}
   label{display:inline-flex;gap:8px;align-items:center}
-  input[type="checkbox"]{scale:1.15}
-
+  input[type="checkbox"]{scale:1.1}
   .grid{display:grid;grid-template-columns: 360px 1fr; gap:16px; align-items:start}
-  @media (max-width:1200px){ .grid{grid-template-columns: 1fr} }
-
+  @media (max-width:1350px){ .grid{grid-template-columns:1fr} }
   .card{background:var(--card);border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.08);padding:16px}
 
-  /* ===== Flip Card Deck ===== */
+  /* Deck */
   .deckWrap{display:flex;flex-direction:column;align-items:center;gap:12px}
   .deck{width:320px;height:180px;position:relative;perspective:1200px}
-  .cardFace{
-    position:absolute; inset:0; display:grid; place-items:center; border-radius:16px;
-    border:1px solid var(--line); backface-visibility:hidden; transition:transform .6s ease;
-    font-family:Fredoka, cursive;
-  }
+  .cardFace{position:absolute; inset:0; display:grid; place-items:center; border-radius:16px;
+    border:1px solid var(--line); backface-visibility:hidden; transition:transform .6s ease; font-family:Fredoka, cursive;}
   .backFace{ background:linear-gradient(135deg,#f1f5f9,#e9d5ff); color:#4c1d95; font-size:24px; }
   .frontFace{ background:#ffffff; color:#111; font-size:28px; transform:rotateY(180deg); }
   .deck.flipped .backFace{ transform:rotateY(180deg); }
   .deck.flipped .frontFace{ transform:rotateY(0deg); }
   .dealTip{font-size:13px;color:var(--muted);text-align:center}
 
-  /* ===== Game image & hotspots ===== */
+  /* Game image */
   .stage{position:relative}
   .confetti{position:absolute; inset:0; pointer-events:none}
   .game{position:relative;display:inline-block;line-height:0;user-select:none}
-  .game img{
-    width:var(--imgw); max-width:100%;
-    height:auto; display:block; border:1px solid var(--line); border-radius:12px
-  }
-  .hotspot{
-    position:absolute; border:2px solid transparent; border-radius:8px; cursor:pointer; box-sizing:border-box;
-  }
+  .game img{width:var(--imgw); max-width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:12px}
+
+  /* Hotspots */
+  .hotspot{position:absolute; border:2px solid transparent; border-radius:8px; cursor:pointer; box-sizing:border-box}
   .teach .hotspot{border-color:rgba(37,99,235,.55)}
   .hotspot.correct{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 4px rgba(34,197,94,.18)}
   .hotspot.wrong{outline:3px solid var(--bad); outline-offset:1.5px}
-  .hotspot.solved{
-    outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 6px rgba(34,197,94,.15); background:rgba(34,197,94,.08);
-  }
-  .hotspot.solved::after{
-    content:attr(data-name);
-    position:absolute; left:0; top:-22px;
-    padding:2px 6px; font-size:12px; font-weight:700;
-    background:#16a34a; color:#fff; border-radius:6px; white-space:nowrap;
-  }
+  .hotspot.solved{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 6px rgba(34,197,94,.15); background:rgba(34,197,94,.08)}
+  .hotspot.solved::after{content:attr(data-name); position:absolute; left:0; top:-22px; padding:2px 6px; font-size:12px; font-weight:700; background:#16a34a; color:#fff; border-radius:6px; white-space:nowrap}
+  .hotspot.selected{outline:3px dashed #2563eb; outline-offset:2px}
+
+  /* Resize handles (Teacher View) */
+  .handle{position:absolute;width:12px;height:12px;background:#2563eb;border:2px solid #fff;border-radius:3px;display:none}
+  .teach .hotspot.selected .handle{display:block}
+  .h-nw{left:-8px;top:-8px}.h-n{left:calc(50% - 6px);top:-8px}.h-ne{right:-8px;top:-8px}
+  .h-e{right:-8px;top:calc(50% - 6px)}.h-se{right:-8px;bottom:-8px}.h-s{left:calc(50% - 6px);bottom:-8px}
+  .h-sw{left:-8px;bottom:-8px}.h-w{left:-8px;top:calc(50% - 6px)}
+
+  /* Editor (Teacher View) */
+  .editor{display:none;margin-top:10px}
+  .teach .editor{display:grid}
+  .editor{grid-template-columns: repeat(5, minmax(120px,1fr)); gap:10px; align-items:end}
+  .editor .field{display:flex;flex-direction:column;gap:6px}
+  .editor label{font-size:12px;color:#374151}
+  .editor input[type=number]{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:8px}
+  .editor .btnrow{display:flex;gap:8px;grid-column:1/-1;justify-content:flex-start}
+  .cursorHud{grid-column:1/-1; font-size:12px; color:#6b7280}
 
   .feedback{min-height:24px;font-weight:700;margin-top:8px;text-align:center}
   .feedback.ok{color:var(--ok)} .feedback.bad{color:var(--bad)}
   .tip{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
-
-  /* Zoom controls */
   .zoom{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
 </style>
 </head>
@@ -92,7 +91,7 @@
     </div>
 
     <div class="grid">
-      <!-- LEFT: Flip-card deck -->
+      <!-- LEFT: Deck -->
       <div class="card deckWrap">
         <div id="deck" class="deck" role="button" aria-label="Card deck (click to flip)">
           <div class="cardFace backFace">Click to flip a card ✨</div>
@@ -102,50 +101,138 @@
         <div class="feedback" id="feedback"></div>
       </div>
 
-      <!-- RIGHT: Screenshot game -->
+      <!-- RIGHT: Game + Editor -->
       <div id="rightCard" class="card stage">
         <canvas id="confetti" class="confetti"></canvas>
+
         <div id="game" class="game">
           <img id="bg" src="chrome.png" alt="Chrome screenshot">
 
-          <!-- Hotspots (percentages tuned for your screenshot; feel free to tweak slightly) -->
-          <!-- Navigation buttons -->
-          <div class="hotspot" data-name="Back"           style="left: 2.2%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
-          <div class="hotspot" data-name="Forward"        style="left: 5.1%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
-          <div class="hotspot" data-name="Refresh"        style="left: 7.9%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
-          <div class="hotspot" data-name="Home"           style="left:10.7%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
+          <!-- Hotspots (rough starting %; you can align exactly in Teacher View) -->
+          <div class="hotspot" data-name="Back"           style="left: 2.3%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Forward"        style="left: 5.1%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Refresh"        style="left: 7.9%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Home"           style="left:10.7%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
 
-          <!-- Tab strip -->
-          <div class="hotspot" data-name="Close Tab"      style="left:55.8%;  top: 2.6%; width: 2.8%;  height: 5.6%;"></div>
-          <div class="hotspot" data-name="New Tab"        style="left:60.6%;  top: 2.6%; width: 2.8%;  height: 5.6%;"></div>
+          <div class="hotspot" data-name="Close Tab"      style="left:55.8%;  top: 2.6%; width: 2.8%;  height: 5.6%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="New Tab"        style="left:60.6%;  top: 2.6%; width: 2.8%;  height: 5.6%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
 
-          <!-- Toolbar right side -->
-          <div class="hotspot" data-name="Bookmarks"      style="left:81.9%;  top: 9.3%; width: 2.9%;  height: 6.8%;"></div>
-          <div class="hotspot" data-name="Add-ons"        style="left:85.0%;  top: 9.3%; width: 3.0%;  height: 6.8%;"></div>
-          <div class="hotspot" data-name="Menu"           style="left:88.0%;  top: 9.3%; width: 2.8%;  height: 6.8%;"></div>
+          <div class="hotspot" data-name="Bookmarks"      style="left:81.9%;  top: 9.3%; width: 2.9%;  height: 6.8%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Add-ons"        style="left:85.0%;  top: 9.3%; width: 3.0%;  height: 6.8%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Menu"           style="left:88.0%;  top: 9.3%; width: 2.8%;  height: 6.8%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
 
-          <!-- Window controls (Windows) -->
-          <div class="hotspot" data-name="Minimize"       style="left:92.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;"></div>
-          <div class="hotspot" data-name="Maximize"       style="left:95.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;"></div>
-          <div class="hotspot" data-name="Close Window"   style="left:98.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;"></div>
+          <div class="hotspot" data-name="Minimize"       style="left:92.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Maximize"       style="left:95.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot" data-name="Close Window"   style="left:98.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
 
-          <!-- Bookmarks bar row -->
-          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top:16.8%; width:98.0%; height: 6.8%;"></div>
+          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top:16.8%; width:98.0%; height: 6.8%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
         </div>
 
+        <!-- Zoom -->
         <div class="zoom">
           <button id="zoomOut">−</button>
           <span class="tip">Zoom</span>
           <button id="zoomIn">+</button>
         </div>
-        <p class="tip">Teacher View outlines hotspots; use GitHub later to fine-tune % if needed.</p>
+
+        <!-- Teacher Editor -->
+        <div id="editor" class="editor">
+          <div class="field">
+            <label for="hsSelect">Hotspot</label>
+            <select id="hsSelect"></select>
+          </div>
+          <div class="field">
+            <label for="leftInp">Left %</label>
+            <input id="leftInp" type="number" step="0.1" min="0" max="100">
+          </div>
+          <div class="field">
+            <label for="topInp">Top %</label>
+            <input id="topInp" type="number" step="0.1" min="0" max="100">
+          </div>
+          <div class="field">
+            <label for="widthInp">Width %</label>
+            <input id="widthInp" type="number" step="0.1" min="0" max="100">
+          </div>
+          <div class="field">
+            <label for="heightInp">Height %</label>
+            <input id="heightInp" type="number" step="0.1" min="0" max="100">
+          </div>
+
+          <div class="btnrow">
+            <button id="nudgeUp">↑</button>
+            <button id="nudgeDown">↓</button>
+            <button id="nudgeLeft">←</button>
+            <button id="nudgeRight">→</button>
+            <button id="growW">W+</button>
+            <button id="shrinkW">W−</button>
+            <button id="growH">H+</button>
+            <button id="shrinkH">H−</button>
+            <button id="copyStyle">Copy style</button>
+            <button id="downloadHtml">Download updated file</button>
+          </div>
+          <div id="cursorHud" class="cursorHud">Cursor: x --% • y --%</div>
+        </div>
+
+        <p class="tip">Teacher View lets you select any hotspot, see its %, and drag/resize with the blue handles. Use “Download updated file” to save your edits, then re-upload to GitHub.</p>
       </div>
     </div>
   </div>
 
 <script>
 (function(){
-  // ===== Elements
+  // Elements
   const scoreEl = document.getElementById('score');
   const totalEl = document.getElementById('total');
   const clockEl = document.getElementById('clock');
@@ -153,56 +240,52 @@
   const teacherChk = document.getElementById('teacher');
   const rightCard = document.getElementById('rightCard');
   const feedback = document.getElementById('feedback');
-
   const deck = document.getElementById('deck');
   const cardWord = document.getElementById('cardWord');
-
+  const confetti = document.getElementById('confetti');
+  const ctx = confetti.getContext('2d');
   const game = document.getElementById('game');
+  const bg = document.getElementById('bg');
   const hotspots = Array.from(game.querySelectorAll('.hotspot'));
-
   const zoomIn = document.getElementById('zoomIn');
   const zoomOut = document.getElementById('zoomOut');
 
-  // Confetti canvas
-  const confetti = document.getElementById('confetti');
-  const ctx = confetti.getContext('2d');
+  // Editor controls
+  const editor = document.getElementById('editor');
+  const hsSelect = document.getElementById('hsSelect');
+  const leftInp = document.getElementById('leftInp');
+  const topInp = document.getElementById('topInp');
+  const widthInp = document.getElementById('widthInp');
+  const heightInp = document.getElementById('heightInp');
+  const copyBtn = document.getElementById('copyStyle');
+  const dlBtn = document.getElementById('downloadHtml');
+  const cursorHud = document.getElementById('cursorHud');
+  const nudge = (id,dx,dy,dw,dh)=> document.getElementById(id).addEventListener('click', ()=> adjustSelected(dx,dy,dw,dh));
+  nudge('nudgeUp',0,-0.2,0,0); nudge('nudgeDown',0,0.2,0,0); nudge('nudgeLeft',-0.2,0,0,0); nudge('nudgeRight',0.2,0,0,0);
+  nudge('growW',0,0,0.2,0); nudge('shrinkW',0,0,-0.2,0); nudge('growH',0,0,0,0.2); nudge('shrinkH',0,0,0,-0.2);
 
-  // ===== State
+  // State
   const ALL = hotspots.map(h => h.dataset.name);
   totalEl.textContent = ALL.length;
+  let remaining = [], current = null, score = 0, start = Date.now(), timer = null;
+  let imgWidth = 1300;
+  let selected = null, dragMode = null; // 'move' or 'resize:dir'
+  let dragStart = null, startBox = null;
 
-  let remaining = []; // remaining words in the deck
-  let current = null;
-  let score = 0;
-  let start = Date.now();
-  let timer = null;
-  let imgWidth = 1200;
-
-  function fmt(ms){
-    const s = Math.floor(ms/1000);
-    const m = String(Math.floor(s/60)).padStart(2,'0');
-    const r = String(s%60).padStart(2,'0');
-    return `${m}:${r}`;
-  }
+  function fmt(ms){ const s=Math.floor(ms/1000), m=String(Math.floor(s/60)).padStart(2,'0'), r=String(s%60).padStart(2,'0'); return `${m}:${r}`; }
   function tick(){ clockEl.textContent = fmt(Date.now()-start); }
 
-  function shuffle(arr){
-    for(let i=arr.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [arr[i],arr[j]]=[arr[j],arr[i]];
-    }
-    return arr;
-  }
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
   function resetGame(){
-    hotspots.forEach(h=>{ h.classList.remove('solved','correct','wrong'); });
+    hotspots.forEach(h=> h.classList.remove('solved','correct','wrong'));
     score = 0; scoreEl.textContent = '0';
-    remaining = shuffle(ALL.slice()); // fresh shuffled deck
+    remaining = shuffle(ALL.slice());
     current = null;
     deck.classList.remove('flipped');
     cardWord.textContent = 'Flip for a word';
     feedback.textContent = '';
-    start = Date.now(); clearInterval(timer); timer = setInterval(tick, 250);
+    start = Date.now(); clearInterval(timer); timer = setInterval(tick,250);
     resizeCanvas();
   }
 
@@ -210,112 +293,183 @@
     if(remaining.length === 0){
       feedback.textContent = '🎉 All done! You found every icon!';
       feedback.className = 'feedback ok';
-      deck.classList.remove('flipped');
-      cardWord.textContent = 'Complete!';
-      clearInterval(timer);
-      fireConfetti();                   // <— celebrate!
-      return;
+      deck.classList.remove('flipped'); cardWord.textContent = 'Complete!';
+      clearInterval(timer); fireConfetti(); return;
     }
-    current = remaining.pop();
-    cardWord.textContent = current;
-    feedback.textContent = '';
-    feedback.className = 'feedback';
+    current = remaining.pop(); cardWord.textContent = current;
+    feedback.textContent = ''; feedback.className = 'feedback';
   }
 
-  // Flip-card behavior
+  // Deck
   deck.addEventListener('click', ()=>{
     deck.classList.toggle('flipped');
-    if(deck.classList.contains('flipped')){
-      if(!current) dealNext();
-    }
+    if(deck.classList.contains('flipped') && !current) dealNext();
   });
 
-  // Hotspot click handling
+  // Gameplay clicks (disabled while Teacher View ON)
   hotspots.forEach(h=>{
-    h.addEventListener('click', ()=>{
-      if(!current){
-        feedback.textContent = 'Flip a card to get a word to find!';
-        feedback.className = 'feedback bad';
-        return;
+    h.addEventListener('click', (e)=>{
+      if(teacherChk.checked){
+        selectHotspot(h); e.stopPropagation(); return;
       }
-      const name = h.dataset.name;
-      if(h.classList.contains('solved')){
-        feedback.textContent = 'Nice! That one is already labeled.';
-        feedback.className = 'feedback';
-        return;
-      }
-      if(name === current){
-        h.classList.remove('wrong'); h.classList.add('solved','correct');
-        score += 1; scoreEl.textContent = String(score);
-        feedback.textContent = '✅ Correct!';
-        feedback.className = 'feedback ok';
-        setTimeout(()=>{
-          deck.classList.remove('flipped');
-          setTimeout(()=>{ dealNext(); deck.classList.add('flipped'); }, 200);
-        }, 650);
+      if(!current){ feedback.textContent='Flip a card to get a word!'; feedback.className='feedback bad'; return; }
+      if(h.classList.contains('solved')){ feedback.textContent='Already labeled.'; feedback.className='feedback'; return; }
+      if(h.dataset.name === current){
+        h.classList.add('solved','correct'); score += 1; scoreEl.textContent = String(score);
+        feedback.textContent='✅ Correct!'; feedback.className='feedback ok';
+        setTimeout(()=>{ deck.classList.remove('flipped'); setTimeout(()=>{ dealNext(); deck.classList.add('flipped'); },200); },650);
       } else {
-        h.classList.remove('correct'); h.classList.add('wrong');
-        feedback.textContent = '❌ Not that one. Try again!';
-        feedback.className = 'feedback bad';
-        setTimeout(()=> h.classList.remove('wrong'), 700);
+        h.classList.add('wrong'); feedback.textContent='❌ Not that one. Try again!'; feedback.className='feedback bad';
+        setTimeout(()=> h.classList.remove('wrong'),700);
       }
-    }, {passive:true});
+    });
   });
 
-  // Controls
-  restartBtn.addEventListener('click', resetGame);
-  teacherChk.addEventListener('change', ()=> rightCard.classList.toggle('teach', teacherChk.checked));
+  // Teacher View toggle
+  teacherChk.addEventListener('change', ()=>{
+    rightCard.classList.toggle('teach', teacherChk.checked);
+    editor.style.display = teacherChk.checked ? 'grid' : 'none';
+  });
 
-  // Zoom controls (change CSS var --imgw)
-  function setImgWidth(w){
-    imgWidth = Math.max(800, Math.min(1600, w));
-    document.documentElement.style.setProperty('--imgw', imgWidth+'px');
-    resizeCanvas();
-  }
-  zoomIn.addEventListener('click', ()=> setImgWidth(imgWidth + 100));
-  zoomOut.addEventListener('click', ()=> setImgWidth(imgWidth - 100));
+  // Populate select
+  ALL.forEach(name=>{
+    const opt = document.createElement('option'); opt.value = name; opt.textContent = name; hsSelect.appendChild(opt);
+  });
+  hsSelect.addEventListener('change', ()=> selectHotspot(hotspots.find(h=>h.dataset.name===hsSelect.value)));
 
-  // ===== Confetti (simple, no libs)
-  let confettiBits = [];
-  function resizeCanvas(){
-    const rect = rightCard.getBoundingClientRect();
-    confetti.width = rect.width;
-    confetti.height = rect.height;
+  // Selecting a hotspot
+  function selectHotspot(el){
+    hotspots.forEach(h=> h.classList.remove('selected'));
+    selected = el; if(!selected) return;
+    selected.classList.add('selected');
+    hsSelect.value = selected.dataset.name;
+    const st = window.getComputedStyle(selected);
+    leftInp.value   = pct(st.left , 'x');
+    topInp.value    = pct(st.top  , 'y');
+    widthInp.value  = pct(st.width, 'x');
+    heightInp.value = pct(st.height,'y');
   }
-  function fireConfetti(){
-    resizeCanvas();
-    const W = confetti.width, H = confetti.height;
-    confettiBits = Array.from({length:180}, ()=>({
-      x: Math.random()*W,
-      y: -10 - Math.random()*H*0.3,
-      r: 4+Math.random()*4,
-      vx: -1.5 + Math.random()*3,
-      vy: 2+Math.random()*3,
-      a: Math.random()*Math.PI*2
-    }));
-    requestAnimationFrame(confettiLoop);
-    setTimeout(()=> confettiBits = [], 2500);
+  function pct(px, axis){
+    const num = parseFloat(px);
+    const rect = bg.getBoundingClientRect();
+    return (axis==='x' ? (num/rect.width*100) : (num/rect.height*100)).toFixed(1);
   }
-  function confettiLoop(){
-    if(!confettiBits.length) return;
-    const W = confetti.width, H = confetti.height;
-    ctx.clearRect(0,0,W,H);
-    for(const p of confettiBits){
-      p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.a += 0.1;
-      // color cycle
-      const hue = ((p.y/2)+p.x)%360;
-      ctx.fillStyle = `hsl(${hue},90%,60%)`;
-      ctx.save();
-      ctx.translate(p.x,p.y);
-      ctx.rotate(p.a);
-      ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
-      ctx.restore();
+  function setBox(el, L,T,W,H){
+    const clamp=(v)=> Math.max(0, Math.min(100, v));
+    el.style.left = clamp(L)+'%'; el.style.top = clamp(T)+'%';
+    el.style.width = clamp(W)+'%'; el.style.height = clamp(H)+'%';
+    // update inputs
+    leftInp.value=L.toFixed(1); topInp.value=T.toFixed(1); widthInp.value=W.toFixed(1); heightInp.value=H.toFixed(1);
+  }
+  // number inputs -> update box
+  [leftInp,topInp,widthInp,heightInp].forEach(inp=>{
+    inp.addEventListener('input', ()=>{
+      if(!selected) return;
+      setBox(selected, parseFloat(leftInp.value||0), parseFloat(topInp.value||0), parseFloat(widthInp.value||0), parseFloat(heightInp.value||0));
+    });
+  });
+
+  // Drag/resize with handles in Teacher View
+  game.addEventListener('mousedown', (e)=>{
+    if(!teacherChk.checked) return;
+    const handle = e.target.closest('.handle');
+    const hs = e.target.closest('.hotspot');
+    if(!hs) return;
+    selectHotspot(hs);
+
+    const rect = bg.getBoundingClientRect();
+    const st = window.getComputedStyle(hs);
+    startBox = {
+      L: parseFloat(leftInp.value), T: parseFloat(topInp.value),
+      W: parseFloat(widthInp.value), H: parseFloat(heightInp.value),
+      rect
+    };
+    dragStart = { x:e.clientX, y:e.clientY };
+
+    if(handle){ dragMode = 'resize:'+handle.dataset.dir; }
+    else { dragMode = 'move'; }
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e)=>{
+    if(!teacherChk.checked || !selected || !dragMode) return;
+    const dx = (e.clientX - dragStart.x) / startBox.rect.width * 100;
+    const dy = (e.clientY - dragStart.y) / startBox.rect.height * 100;
+
+    let L=startBox.L, T=startBox.T, W=startBox.W, H=startBox.H;
+
+    if(dragMode==='move'){ L += dx; T += dy; }
+    else{
+      const dir = dragMode.split(':')[1];
+      if(dir.includes('w')){ L += dx; W -= dx; }
+      if(dir.includes('e')){ W += dx; }
+      if(dir.includes('n')){ T += dy; H -= dy; }
+      if(dir.includes('s')){ H += dy; }
     }
-    requestAnimationFrame(confettiLoop);
+    setBox(selected,L,T,W,H);
+  });
+  window.addEventListener('mouseup', ()=>{ dragMode=null; });
+
+  // Cursor HUD (always shows in Teacher View)
+  game.addEventListener('mousemove', (e)=>{
+    if(!teacherChk.checked) return;
+    const r = bg.getBoundingClientRect();
+    const x = ((e.clientX - r.left)/r.width)*100;
+    const y = ((e.clientY - r.top)/r.height)*100;
+    if(isFinite(x) && isFinite(y)) cursorHud.textContent = `Cursor: x ${x.toFixed(1)}% • y ${y.toFixed(1)}%`;
+  });
+
+  // Adjust selected by buttons
+  function adjustSelected(dx,dy,dw,dh){
+    if(!selected) return;
+    setBox(selected,
+      parseFloat(leftInp.value)+dx,
+      parseFloat(topInp.value)+dy,
+      parseFloat(widthInp.value)+dw,
+      parseFloat(heightInp.value)+dh
+    );
+  }
+
+  // Copy style
+  copyBtn.addEventListener('click', ()=>{
+    if(!selected) return;
+    const s = selected.getAttribute('style');
+    navigator.clipboard.writeText(s).then(()=> {
+      feedback.textContent='Copied current style to clipboard! Paste back into the HTML to save.'; feedback.className='feedback ok';
+    });
+  });
+
+  // Download updated HTML (persists your current % edits)
+  dlBtn.addEventListener('click', ()=>{
+    const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='index.html'; a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  // Zoom
+  function setImgWidth(w){ imgWidth = Math.max(900, Math.min(1800, w)); document.documentElement.style.setProperty('--imgw', imgWidth+'px'); resizeCanvas(); }
+  zoomIn.addEventListener('click', ()=> setImgWidth(imgWidth+100));
+  zoomOut.addEventListener('click', ()=> setImgWidth(imgWidth-100));
+
+  // Confetti
+  let confettiBits = [];
+  function resizeCanvas(){ const r = rightCard.getBoundingClientRect(); confetti.width=r.width; confetti.height=r.height; }
+  function fireConfetti(){
+    resizeCanvas(); const W=confetti.width, H=confetti.height;
+    confettiBits = Array.from({length:200}, ()=>({x:Math.random()*W,y:-10-Math.random()*H*.3,r:4+Math.random()*4,vx:-1.5+Math.random()*3,vy:2+Math.random()*3,a:Math.random()*Math.PI*2}));
+    requestAnimationFrame(loop);
+    setTimeout(()=> confettiBits=[], 2500);
+  }
+  function loop(){
+    if(!confettiBits.length) return;
+    const W=confetti.width,H=confetti.height; ctx.clearRect(0,0,W,H);
+    for(const p of confettiBits){ p.x+=p.vx; p.y+=p.vy; p.vy+=0.05; p.a+=0.1; ctx.fillStyle=`hsl(${((p.y/2)+p.x)%360},90%,60%)`; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r); ctx.restore(); }
+    requestAnimationFrame(loop);
   }
 
   // Init
   resetGame();
+  // Preselect first hotspot in Teacher View for convenience
+  hsSelect.value = ALL[0]; selectHotspot(hotspots[0]);
 })();
 </script>
 </body>
