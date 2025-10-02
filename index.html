@@ -1,10 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<html lang="en" style="--imgw: 1000px;"><plasmo-csui id="brisk-teaching-extension-shadow-root" data-extension-version="1.0.296" data-extension-name="Brisk Teaching – AI Assistant for Teachers" style="z-index: 2147483647;"></plasmo-csui><plasmo-csui id="plasmo-inspector"></plasmo-csui><script async="" defer="" src="chrome-extension://pcblbflgdkdfdjpjifeppkljdnaekohj/GdocApi.0c843771.js" type="text/javascript"></script><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Second Grade STEM: Identifying Browser Icons</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
@@ -75,16 +73,21 @@
   .tip{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
   .zoom{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
 </style>
-</head>
-<body>
+<style>
+.--brisk-axd {
+  filter: blur(4px);
+  user-select: none;
+}
+</style><style></style></head>
+<body data-new-gr-c-s-check-loaded="14.1255.0" data-gr-ext-installed="">
   <div class="wrap">
     <h1 class="title">Second Grade STEM: <span style="color:var(--brand)">Identifying Browser Icons</span></h1>
     <p class="subtitle">Flip a card to see the icon name. Click the matching spot on the browser!</p>
 
     <div class="row">
       <div class="hud">
-        <span>Score: <strong id="score">0</strong>/<strong id="total">13</strong></span>
-        <span>• Time: <strong id="clock">00:00</strong></span>
+        <span>Score: <strong id="score">13</strong>/<strong id="total">13</strong></span>
+        <span>• Time: <strong id="clock">03:08</strong></span>
       </div>
       <button id="restart">Restart</button>
       <label><input type="checkbox" id="teacher"> <span>Teacher View</span></label>
@@ -93,87 +96,87 @@
     <div class="grid">
       <!-- LEFT: Deck -->
       <div class="card deckWrap">
-        <div id="deck" class="deck" role="button" aria-label="Card deck (click to flip)">
+        <div id="deck" class="deck flipped" role="button" aria-label="Card deck (click to flip)">
           <div class="cardFace backFace">Click to flip a card ✨</div>
-          <div class="cardFace frontFace" id="cardWord">Refresh</div>
+          <div class="cardFace frontFace" id="cardWord">Complete!</div>
         </div>
         <div class="dealTip">Tip: Click the card to reveal the next icon name.</div>
-        <div class="feedback" id="feedback"></div>
+        <div class="feedback ok" id="feedback">Copied current style to clipboard! Paste back into the HTML to save.</div>
       </div>
 
       <!-- RIGHT: Game + Editor -->
-      <div id="rightCard" class="card stage">
-        <canvas id="confetti" class="confetti"></canvas>
+      <div id="rightCard" class="card stage teach">
+        <canvas id="confetti" class="confetti" width="1224" height="768"></canvas>
 
         <div id="game" class="game">
           <img id="bg" src="chrome.png" alt="Chrome screenshot">
 
           <!-- Hotspots (rough starting %; you can align exactly in Teacher View) -->
-          <div class="hotspot" data-name="Back"           style="left: 2.3%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+          <div class="hotspot solved correct" data-name="Back" style="left: 0.400399%; top: 5.6%; width: 2.9%; height: 4.5%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot" data-name="Forward"        style="left: 5.1%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+          <div class="hotspot solved correct" data-name="Forward" style="left: 3.6%; top: 5.6%; width: 2.9%; height: 4.52753%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot" data-name="Refresh"        style="left: 7.9%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
+          <div class="hotspot solved correct" data-name="Refresh" style="left: 6.5%; top: 5.75583%; width: 2.9%; height: 4.44417%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot" data-name="Home"           style="left:10.7%;  top: 8.9%; width: 2.9%;  height: 7.3%;">
-            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
-            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
-            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
-          </div>
-
-          <div class="hotspot" data-name="Close Tab"      style="left:55.8%;  top: 2.6%; width: 2.8%;  height: 5.6%;">
-            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
-            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
-            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
-          </div>
-          <div class="hotspot" data-name="New Tab"        style="left:60.6%;  top: 2.6%; width: 2.8%;  height: 5.6%;">
+          <div class="hotspot solved correct" data-name="Home" style="left: 9.6%; top: 5.6%; width: 2.9%; height: 4.6%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
 
-          <div class="hotspot" data-name="Bookmarks"      style="left:81.9%;  top: 9.3%; width: 2.9%;  height: 6.8%;">
+          <div class="hotspot solved correct" data-name="Close Tab" style="left: 57.1%; top: 0.703886%; width: 2.8%; height: 4%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot" data-name="Add-ons"        style="left:85.0%;  top: 9.3%; width: 3.0%;  height: 6.8%;">
-            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
-            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
-            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
-          </div>
-          <div class="hotspot" data-name="Menu"           style="left:88.0%;  top: 9.3%; width: 2.8%;  height: 6.8%;">
+          <div class="hotspot solved correct selected" data-name="New Tab" style="left: 60.1002%; top: 0.551943%; width: 2.8%; height: 4%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
 
-          <div class="hotspot" data-name="Minimize"       style="left:92.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;">
+          <div class="hotspot solved correct" data-name="Bookmarks" style="left: 75.0486%; top: 5.5%; width: 2.9%; height: 4.6%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot" data-name="Maximize"       style="left:95.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;">
+          <div class="hotspot solved correct" data-name="Add-ons" style="left: 82.1874%; top: 5.83926%; width: 3%; height: 4.1%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
-          <div class="hotspot" data-name="Close Window"   style="left:98.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;">
+          <div class="hotspot solved correct" data-name="Menu" style="left: 97.1953%; top: 5.84087%; width: 2.8%; height: 4.1%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
           </div>
 
-          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top:16.8%; width:98.0%; height: 6.8%;">
+          <div class="hotspot solved correct" data-name="Minimize" style="left: 89.7062%; top: 0%; width: 2.7%; height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot solved correct" data-name="Maximize" style="left: 93.2838%; top: 0%; width: 2.7%; height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+          <div class="hotspot solved correct" data-name="Close Window" style="left: 97.1513%; top: 0%; width: 2.7%; height: 5.1%;">
+            <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
+            <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
+            <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
+          </div>
+
+          <div class="hotspot solved correct" data-name="Bookmarks Bar" style="left: 0%; top: 11.2%; width: 99.3%; height: 3.22914%;">
             <div class="handle h-nw" data-dir="nw"></div><div class="handle h-n" data-dir="n"></div><div class="handle h-ne" data-dir="ne"></div>
             <div class="handle h-e" data-dir="e"></div><div class="handle h-se" data-dir="se"></div><div class="handle h-s" data-dir="s"></div>
             <div class="handle h-sw" data-dir="sw"></div><div class="handle h-w" data-dir="w"></div>
@@ -188,10 +191,10 @@
         </div>
 
         <!-- Teacher Editor -->
-        <div id="editor" class="editor">
+        <div id="editor" class="editor" style="display: grid;">
           <div class="field">
             <label for="hsSelect">Hotspot</label>
-            <select id="hsSelect"></select>
+            <select id="hsSelect"><option value="Back">Back</option><option value="Forward">Forward</option><option value="Refresh">Refresh</option><option value="Home">Home</option><option value="Close Tab">Close Tab</option><option value="New Tab">New Tab</option><option value="Bookmarks">Bookmarks</option><option value="Add-ons">Add-ons</option><option value="Menu">Menu</option><option value="Minimize">Minimize</option><option value="Maximize">Maximize</option><option value="Close Window">Close Window</option><option value="Bookmarks Bar">Bookmarks Bar</option></select>
           </div>
           <div class="field">
             <label for="leftInp">Left %</label>
@@ -222,7 +225,7 @@
             <button id="copyStyle">Copy style</button>
             <button id="downloadHtml">Download updated file</button>
           </div>
-          <div id="cursorHud" class="cursorHud">Cursor: x --% • y --%</div>
+          <div id="cursorHud" class="cursorHud">Cursor: x 51.3% • y 97.9%</div>
         </div>
 
         <p class="tip">Teacher View lets you select any hotspot, see its %, and drag/resize with the blue handles. Use “Download updated file” to save your edits, then re-upload to GitHub.</p>
@@ -472,5 +475,6 @@
   hsSelect.value = ALL[0]; selectHotspot(hotspots[0]);
 })();
 </script>
-</body>
-</html>
+
+
+<!----comment node----><div id="give-freely-root-mbnbehikldjhnfehhnaidhjhoofhpehk" class="give-freely-root" data-extension-id="mbnbehikldjhnfehhnaidhjhoofhpehk" data-extension-name="CSS Peeper" style="display: block;"></div><scribe-shadow id="crxjs-ext" data-crx="okfkdaglfjjjfefdcppliegebpoegaii" style="position: fixed; width: 0px; height: 0px; top: 0px; left: 0px; z-index: 2147483647; overflow: visible; visibility: visible;"></scribe-shadow></body><dubble-extension id="__dubble0394030940.54566541731947771759436487478"></dubble-extension><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
