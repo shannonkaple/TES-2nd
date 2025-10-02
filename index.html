@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Find the Browser Icon</title>
+<style>
+  body { font-family: sans-serif; text-align: center; background: #f5f5f5; }
+  #game { position: relative; display: inline-block; }
+  #game img { max-width: 100%; height: auto; }
+  .hotspot {
+    position: absolute;
+    border: 2px solid transparent;
+    cursor: pointer;
+  }
+  .hotspot.correct { border: 2px solid limegreen; }
+  .hotspot.wrong { border: 2px solid red; }
+  #prompt { font-size: 1.2em; margin: 20px 0; }
+</style>
+</head>
+<body>
+  <h1>Browser Icon Hunt</h1>
+  <p id="prompt">Click on: <strong id="targetName">Refresh</strong></p>
+
+  <div id="game">
+    <img src="https://cdn.glitch.global/your-project-id/chrome.png" alt="Google Chrome screenshot">
+    <!-- Example hotspots (you’ll adjust coordinates) -->
+    <div class="hotspot" data-name="Refresh" style="top:20px; left:200px; width:30px; height:30px;"></div>
+    <div class="hotspot" data-name="Home" style="top:20px; left:250px; width:30px; height:30px;"></div>
+    <div class="hotspot" data-name="Tabs" style="top:20px; left:300px; width:30px; height:30px;"></div>
+  </div>
+
+  <p id="feedback"></p>
+
+<script>
+const hotspots = document.querySelectorAll('.hotspot');
+const targetDisplay = document.getElementById('targetName');
+const feedback = document.getElementById('feedback');
+
+let targets = Array.from(hotspots).map(h => h.dataset.name);
+let currentTarget = "";
+
+function newTarget() {
+  currentTarget = targets[Math.floor(Math.random()*targets.length)];
+  targetDisplay.textContent = currentTarget;
+  feedback.textContent = "";
+}
+
+hotspots.forEach(h => {
+  h.addEventListener('click', () => {
+    if (h.dataset.name === currentTarget) {
+      h.classList.add('correct');
+      feedback.textContent = "✅ Correct!";
+      setTimeout(()=>{h.classList.remove('correct'); newTarget();},1000);
+    } else {
+      h.classList.add('wrong');
+      feedback.textContent = "❌ Try again!";
+      setTimeout(()=>h.classList.remove('wrong'),1000);
+    }
+  });
+});
+
+newTarget();
+</script>
+</body>
+</html>
