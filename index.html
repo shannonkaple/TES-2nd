@@ -4,20 +4,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Second Grade STEM: Identifying Browser Icons</title>
-
-<!-- Cute, kid-friendly display font for the title -->
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
 <style>
   :root{
     --bg:#f6f7fb; --card:#ffffff; --ink:#111827; --muted:#6b7280; --line:#e5e7eb;
-    --ok:#22c55e; --bad:#ef4444; --brand:#7c3aed; /* purple accent */
-    --glow: 0 0 0 4px rgba(34,197,94,.25), 0 8px 18px rgba(34,197,94,.25);
+    --ok:#22c55e; --bad:#ef4444; --brand:#7c3aed;
+    --imgw: 1200px; /* default screenshot width (you can change) */
   }
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
-  .wrap{max-width:1100px;margin:24px auto;padding:16px}
+  .wrap{max-width:1400px;margin:24px auto;padding:16px}
   .title{
-    font-family:Fredoka, cursive; text-align:center; margin:0 0 12px;
+    font-family:Fredoka, cursive; text-align:center; margin:0 0 8px;
     font-size:clamp(22px, 3.6vw, 44px); line-height:1.1; color:#111;
   }
   .subtitle{ text-align:center; margin:0 0 16px; color:var(--muted) }
@@ -30,7 +27,7 @@
   input[type="checkbox"]{scale:1.15}
 
   .grid{display:grid;grid-template-columns: 360px 1fr; gap:16px; align-items:start}
-  @media (max-width:920px){ .grid{grid-template-columns: 1fr} }
+  @media (max-width:1200px){ .grid{grid-template-columns: 1fr} }
 
   .card{background:var(--card);border-radius:16px;box-shadow:0 8px 20px rgba(0,0,0,.08);padding:16px}
 
@@ -46,33 +43,38 @@
   .frontFace{ background:#ffffff; color:#111; font-size:28px; transform:rotateY(180deg); }
   .deck.flipped .backFace{ transform:rotateY(180deg); }
   .deck.flipped .frontFace{ transform:rotateY(0deg); }
-
   .dealTip{font-size:13px;color:var(--muted);text-align:center}
 
   /* ===== Game image & hotspots ===== */
+  .stage{position:relative}
+  .confetti{position:absolute; inset:0; pointer-events:none}
   .game{position:relative;display:inline-block;line-height:0;user-select:none}
-  .game img{max-width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px}
+  .game img{
+    width:var(--imgw); max-width:100%;
+    height:auto; display:block; border:1px solid var(--line); border-radius:12px
+  }
   .hotspot{
     position:absolute; border:2px solid transparent; border-radius:8px; cursor:pointer; box-sizing:border-box;
   }
   .teach .hotspot{border-color:rgba(37,99,235,.55)}
-  .hotspot.correct{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:var(--glow)}
+  .hotspot.correct{outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 4px rgba(34,197,94,.18)}
   .hotspot.wrong{outline:3px solid var(--bad); outline-offset:1.5px}
-  /* After a hotspot is solved, keep it labeled & softly highlighted */
   .hotspot.solved{
-    outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:var(--glow); background:rgba(34,197,94,.08);
+    outline:3px solid var(--ok); outline-offset:1.5px; box-shadow:0 0 0 6px rgba(34,197,94,.15); background:rgba(34,197,94,.08);
   }
   .hotspot.solved::after{
     content:attr(data-name);
-    position:absolute; left:0; top:-22px; transform:translateY(-2px);
+    position:absolute; left:0; top:-22px;
     padding:2px 6px; font-size:12px; font-weight:700;
     background:#16a34a; color:#fff; border-radius:6px; white-space:nowrap;
   }
 
   .feedback{min-height:24px;font-weight:700;margin-top:8px;text-align:center}
   .feedback.ok{color:var(--ok)} .feedback.bad{color:var(--bad)}
-
   .tip{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+
+  /* Zoom controls */
+  .zoom{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
 </style>
 </head>
 <body>
@@ -97,35 +99,45 @@
           <div class="cardFace frontFace" id="cardWord">Refresh</div>
         </div>
         <div class="dealTip">Tip: Click the card to reveal the next icon name.</div>
-        <div id="feedback" class="feedback"></div>
+        <div class="feedback" id="feedback"></div>
       </div>
 
       <!-- RIGHT: Screenshot game -->
-      <div id="rightCard" class="card">
+      <div id="rightCard" class="card stage">
+        <canvas id="confetti" class="confetti"></canvas>
         <div id="game" class="game">
-          <!-- Replace with your own screenshot if needed -->
           <img id="bg" src="chrome.png" alt="Chrome screenshot">
 
-          <!-- Hotspots aligned in percentages (adjust if your image differs) -->
-          <div class="hotspot" data-name="Back"           style="left: 2.3%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
-          <div class="hotspot" data-name="Forward"        style="left: 5.1%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
-          <div class="hotspot" data-name="Refresh"        style="left: 7.8%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
-          <div class="hotspot" data-name="Home"           style="left:10.6%;  top: 8.8%; width: 2.8%;  height: 7.2%;"></div>
+          <!-- Hotspots (percentages tuned for your screenshot; feel free to tweak slightly) -->
+          <!-- Navigation buttons -->
+          <div class="hotspot" data-name="Back"           style="left: 2.2%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
+          <div class="hotspot" data-name="Forward"        style="left: 5.1%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
+          <div class="hotspot" data-name="Refresh"        style="left: 7.9%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
+          <div class="hotspot" data-name="Home"           style="left:10.7%;  top: 8.9%; width: 2.9%;  height: 7.3%;"></div>
 
-          <div class="hotspot" data-name="New Tab"        style="left:60.6%;  top: 2.2%; width: 2.6%;  height: 5.6%;"></div>
-          <div class="hotspot" data-name="Close Tab"      style="left:55.9%;  top: 2.2%; width: 2.6%;  height: 5.6%;"></div>
+          <!-- Tab strip -->
+          <div class="hotspot" data-name="Close Tab"      style="left:55.8%;  top: 2.6%; width: 2.8%;  height: 5.6%;"></div>
+          <div class="hotspot" data-name="New Tab"        style="left:60.6%;  top: 2.6%; width: 2.8%;  height: 5.6%;"></div>
 
-          <div class="hotspot" data-name="Bookmarks"      style="left:82.0%;  top: 9.2%; width: 2.8%;  height: 6.8%;"></div>
-          <div class="hotspot" data-name="Add-ons"        style="left:85.0%;  top: 9.2%; width: 2.8%;  height: 6.8%;"></div>
-          <div class="hotspot" data-name="Menu"           style="left:88.0%;  top: 9.2%; width: 2.8%;  height: 6.8%;"></div>
+          <!-- Toolbar right side -->
+          <div class="hotspot" data-name="Bookmarks"      style="left:81.9%;  top: 9.3%; width: 2.9%;  height: 6.8%;"></div>
+          <div class="hotspot" data-name="Add-ons"        style="left:85.0%;  top: 9.3%; width: 3.0%;  height: 6.8%;"></div>
+          <div class="hotspot" data-name="Menu"           style="left:88.0%;  top: 9.3%; width: 2.8%;  height: 6.8%;"></div>
 
-          <div class="hotspot" data-name="Minimize"       style="left:92.0%;  top: 1.6%; width: 2.6%;  height: 5.0%;"></div>
-          <div class="hotspot" data-name="Maximize"       style="left:95.0%;  top: 1.6%; width: 2.6%;  height: 5.0%;"></div>
-          <div class="hotspot" data-name="Close Window"   style="left:98.0%;  top: 1.6%; width: 2.6%;  height: 5.0%;"></div>
+          <!-- Window controls (Windows) -->
+          <div class="hotspot" data-name="Minimize"       style="left:92.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;"></div>
+          <div class="hotspot" data-name="Maximize"       style="left:95.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;"></div>
+          <div class="hotspot" data-name="Close Window"   style="left:98.0%;  top: 1.9%; width: 2.7%;  height: 5.1%;"></div>
 
-          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top:16.5%; width:98.0%; height: 6.8%;"></div>
+          <!-- Bookmarks bar row -->
+          <div class="hotspot" data-name="Bookmarks Bar"  style="left: 1.0%;  top:16.8%; width:98.0%; height: 6.8%;"></div>
         </div>
 
+        <div class="zoom">
+          <button id="zoomOut">−</button>
+          <span class="tip">Zoom</span>
+          <button id="zoomIn">+</button>
+        </div>
         <p class="tip">Teacher View outlines hotspots; use GitHub later to fine-tune % if needed.</p>
       </div>
     </div>
@@ -148,6 +160,13 @@
   const game = document.getElementById('game');
   const hotspots = Array.from(game.querySelectorAll('.hotspot'));
 
+  const zoomIn = document.getElementById('zoomIn');
+  const zoomOut = document.getElementById('zoomOut');
+
+  // Confetti canvas
+  const confetti = document.getElementById('confetti');
+  const ctx = confetti.getContext('2d');
+
   // ===== State
   const ALL = hotspots.map(h => h.dataset.name);
   totalEl.textContent = ALL.length;
@@ -157,6 +176,7 @@
   let score = 0;
   let start = Date.now();
   let timer = null;
+  let imgWidth = 1200;
 
   function fmt(ms){
     const s = Math.floor(ms/1000);
@@ -175,7 +195,6 @@
   }
 
   function resetGame(){
-    // clear solved styles
     hotspots.forEach(h=>{ h.classList.remove('solved','correct','wrong'); });
     score = 0; scoreEl.textContent = '0';
     remaining = shuffle(ALL.slice()); // fresh shuffled deck
@@ -184,6 +203,7 @@
     cardWord.textContent = 'Flip for a word';
     feedback.textContent = '';
     start = Date.now(); clearInterval(timer); timer = setInterval(tick, 250);
+    resizeCanvas();
   }
 
   function dealNext(){
@@ -193,9 +213,10 @@
       deck.classList.remove('flipped');
       cardWord.textContent = 'Complete!';
       clearInterval(timer);
+      fireConfetti();                   // <— celebrate!
       return;
     }
-    current = remaining.pop();           // take from the “top” of the pile
+    current = remaining.pop();
     cardWord.textContent = current;
     feedback.textContent = '';
     feedback.className = 'feedback';
@@ -203,10 +224,8 @@
 
   // Flip-card behavior
   deck.addEventListener('click', ()=>{
-    // flip animation
     deck.classList.toggle('flipped');
     if(deck.classList.contains('flipped')){
-      // If we flipped to show the front and there’s no current word, deal
       if(!current) dealNext();
     }
   });
@@ -214,32 +233,29 @@
   // Hotspot click handling
   hotspots.forEach(h=>{
     h.addEventListener('click', ()=>{
-      if(!current){ // no card dealt yet
+      if(!current){
         feedback.textContent = 'Flip a card to get a word to find!';
         feedback.className = 'feedback bad';
         return;
       }
       const name = h.dataset.name;
       if(h.classList.contains('solved')){
-        // already solved; ignore but keep it positive
         feedback.textContent = 'Nice! That one is already labeled.';
         feedback.className = 'feedback';
         return;
       }
       if(name === current){
-        // correct: highlight and label this hotspot; auto-deal next
         h.classList.remove('wrong'); h.classList.add('solved','correct');
         score += 1; scoreEl.textContent = String(score);
         feedback.textContent = '✅ Correct!';
         feedback.className = 'feedback ok';
-        // auto-deal the next word after a beat; flip card back so they can flip again
         setTimeout(()=>{
-          deck.classList.remove('flipped'); // turn card face down
-          setTimeout(()=>{ dealNext(); deck.classList.add('flipped'); }, 200); // flip back up with a new word
+          deck.classList.remove('flipped');
+          setTimeout(()=>{ dealNext(); deck.classList.add('flipped'); }, 200);
         }, 650);
       } else {
         h.classList.remove('correct'); h.classList.add('wrong');
-        feedback.textContent = '❌ That is not the card word. Try another spot!';
+        feedback.textContent = '❌ Not that one. Try again!';
         feedback.className = 'feedback bad';
         setTimeout(()=> h.classList.remove('wrong'), 700);
       }
@@ -249,6 +265,54 @@
   // Controls
   restartBtn.addEventListener('click', resetGame);
   teacherChk.addEventListener('change', ()=> rightCard.classList.toggle('teach', teacherChk.checked));
+
+  // Zoom controls (change CSS var --imgw)
+  function setImgWidth(w){
+    imgWidth = Math.max(800, Math.min(1600, w));
+    document.documentElement.style.setProperty('--imgw', imgWidth+'px');
+    resizeCanvas();
+  }
+  zoomIn.addEventListener('click', ()=> setImgWidth(imgWidth + 100));
+  zoomOut.addEventListener('click', ()=> setImgWidth(imgWidth - 100));
+
+  // ===== Confetti (simple, no libs)
+  let confettiBits = [];
+  function resizeCanvas(){
+    const rect = rightCard.getBoundingClientRect();
+    confetti.width = rect.width;
+    confetti.height = rect.height;
+  }
+  function fireConfetti(){
+    resizeCanvas();
+    const W = confetti.width, H = confetti.height;
+    confettiBits = Array.from({length:180}, ()=>({
+      x: Math.random()*W,
+      y: -10 - Math.random()*H*0.3,
+      r: 4+Math.random()*4,
+      vx: -1.5 + Math.random()*3,
+      vy: 2+Math.random()*3,
+      a: Math.random()*Math.PI*2
+    }));
+    requestAnimationFrame(confettiLoop);
+    setTimeout(()=> confettiBits = [], 2500);
+  }
+  function confettiLoop(){
+    if(!confettiBits.length) return;
+    const W = confetti.width, H = confetti.height;
+    ctx.clearRect(0,0,W,H);
+    for(const p of confettiBits){
+      p.x += p.vx; p.y += p.vy; p.vy += 0.05; p.a += 0.1;
+      // color cycle
+      const hue = ((p.y/2)+p.x)%360;
+      ctx.fillStyle = `hsl(${hue},90%,60%)`;
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.a);
+      ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+      ctx.restore();
+    }
+    requestAnimationFrame(confettiLoop);
+  }
 
   // Init
   resetGame();
